@@ -1,0 +1,22 @@
+{
+  "name": "cetusfood-back-end",
+  "version": "1.0.0",
+  "description": "API do CetusFood",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/husi-cetuspro/cetusfood-back-end.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/husi-cetuspro/cetusfood-back-end/issues"
+  },
+  "homepage": "https://github.com/husi-cetuspro/cetusfood-back-end#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
