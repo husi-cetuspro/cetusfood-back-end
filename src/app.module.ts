@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { RestaurantsModule } from './restaurants/restaurants.module';
-import { OrdersModule } from './orders/orders.module';
+import { RestaurantsModule } from './api/restaurants/restaurants.module';
+import { OrdersModule } from './api/orders/orders.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 			database: 'cetusfood.sqlite',
 			entities: [__dirname + '/**/*.entity{.ts,.js}'],
 			synchronize: true
-		})
+		}),
 	],
 	providers: [],
 })

@@ -7,25 +7,26 @@ import { Restaurant } from './restaurant.entity';
 export class RestaurantsService {
 	constructor(@InjectRepository(Restaurant) private readonly repository: Repository<Restaurant>) {}
 
-	public async getAll(): Promise<Restaurant[]> {
+	public async getAllRestaurants(): Promise<Restaurant[]> {
 		return await this.repository.find();
 	}
 
-	public async getById(id: number): Promise<Restaurant> {
+	public async getRestaurantById(id: number): Promise<Restaurant> {
 		return await this.repository.findOne({
 			where: [ {id: id} ],
 		});
 	}
 
-	public async delete(id: number): Promise<DeleteResult> {
+	public async deleteRestaurant(id: number): Promise<DeleteResult> {
 		return await this.repository.delete(id);
 	}
 
-	public async edit(id: number, restaurant: Restaurant): Promise<UpdateResult> {
+	public async editRestaurant(id: number, restaurant: Restaurant): Promise<UpdateResult> {
 		return await this.repository.update(id, restaurant);
 	}
 
-	public async add(restaurant: Restaurant): Promise<Restaurant> {
+	// TODO: zwroc samo id
+	public async addRestaurant(restaurant: Restaurant): Promise<Restaurant> {
 		return this.repository.save(restaurant);
 	}
 }
