@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RestaurantsModule } from './restaurants/restaurants.module';
+import { RestaurantsModule } from './api/restaurants/restaurants.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
