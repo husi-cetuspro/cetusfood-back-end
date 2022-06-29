@@ -1,21 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { AddRestaurantDto } from 'src/dtos/add-restaurant.dto';
-
-// TODO: Implement SQLite database
-let restaurants: object[] = [
-	{name: "Test", mail: "test@test.com", url: "test.com"},
-	{name: "Test2", mail: "test2@test2.com", url: "test2.com"},
-];
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, UpdateResult, DeleteResult } from 'typeorm';
+import { Restaurant } from './restaurant.entity';
 
 @Injectable()
 export class RestaurantsService {
-	public getAllRestaurants(): object[]  {
-		return restaurants;
+	constructor(@InjectRepository(Restaurant) private readonly repository: Repository<Restaurant>) {}
+
+	public async getAll(): Promise<Restaurant[]> {
+		return await this.repository.find();
 	}
 
-	public addRestaurant(dto: AddRestaurantDto): object {
-		console.log(dto);
-		restaurants.push({name: dto.name, mail: dto.mail, url: dto.url});
-		return { message: "Pomyślnie dodano restauracje" };
+	public async getById(id: number): Promise<Restaurant> {
+		return await this.repository.findOne({
+			where: [ {id: id} ],
+		});
+	}
+
+	public async delete(id: number): Promise<DeleteResult> {
+		return await this.repository.delete(id);
+	}
+
+	public async edit(id: number, restaurant: Restaurant): Promise<UpdateResult> {
+		return await this.repository.update(id, restaurant);
+	}
+
+	public async add(restaurant: Restaurant): Promise<Restaurant> {
+		return this.repository.save(restaurant);
 	}
 }
