@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult, DeleteResult } from 'typeorm';
-import { Restaurant } from './restaurants.entity';
+import { Restaurant } from './restaurant.entity';
 
 @Injectable()
 export class RestaurantsService {
