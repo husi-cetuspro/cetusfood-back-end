@@ -10,7 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 			database: 'cetusfood.sqlite',
 			entities: [__dirname + '/**/*.entity{.ts,.js}'],
 			synchronize: true
-		})
+		}),
 	],
 	providers: [],
 })

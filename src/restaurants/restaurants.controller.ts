@@ -23,14 +23,14 @@ export class RestaurantsController {
 		return await this.restaurantService.getById(id);
 	}
 
-	@Put()
+	@Post()
 	@ApiOperation({summary: "Dodaje restaurację do bazy danych"})
 	@ApiOkResponse({description: "Obiekt, ktory został dodany do bazy danych", type: Restaurant, isArray: false})
 	public async add(@Body() restaurant: Restaurant): Promise<Restaurant> {
 		return await this.restaurantService.add(restaurant);
 	}
 
-	@Post(':id')
+	@Put(':id')
 	@ApiOperation({summary: "Edytuje restaurację o podanym id"})
 	@ApiOkResponse({schema: {
 		type: 'object',
