@@ -1,29 +1,34 @@
 import { Post, Param, Delete, Body, Put, Get, Controller } from '@nestjs/common';
-import { AddRestaurantDto } from 'src/dtos/add-restaurant.dto';
-import { EditRestaurantDto } from 'src/dtos/edit-restaurant.dto';
+import { DeleteResult, UpdateResult } from 'typeorm';
+import { Restaurant } from './restaurants.entity';
 import { RestaurantsService } from './restaurants.service';
 
 @Controller('restaurants')
 export class RestaurantsController {
-	constructor(private readonly service: RestaurantsService) {}
+	constructor(private readonly restaurantService: RestaurantsService) {}
 
 	@Get()
-	public getAllRestaurants() {
-		return this.service.getAllRestaurants();
+	public async getAll(): Promise<Restaurant[]> {
+		return await this.restaurantService.getAll();
+	}
+
+	@Get(':id')
+	public async getById(@Param('id') id: number): Promise<Restaurant> {
+		return await this.restaurantService.getById(id);
 	}
 
 	@Put()
-	public addRestaurant(@Body() dto: AddRestaurantDto) {
-		return this.service.addRestaurant(dto);
+	public async add(@Body() restaurant: Restaurant): Promise<Restaurant> {
+		return await this.restaurantService.add(restaurant);
+	}
+
+	@Post(':id')
+	public async edit(@Param('id') id: number, @Body() restaurant: Restaurant): Promise<UpdateResult> {
+		return await this.restaurantService.edit(id, restaurant);
 	}
 
 	@Delete(':id')
-	public deleteRestaurant(@Param('id') id: string) {
-		return this.service.deleteRestaurant(parseInt(id));
-	}
-
-	@Post()
-	public editRestaurant(@Body() dto: EditRestaurantDto) {
-		return this.service.editRestaurant(dto);
+	public async delete(@Param('id') id: number): Promise<DeleteResult> {
+		return await this.restaurantService.delete(id);
 	}
 }
