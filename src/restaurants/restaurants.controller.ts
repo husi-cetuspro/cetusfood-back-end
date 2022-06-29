@@ -16,20 +16,21 @@ export class RestaurantsController {
 		return await this.restaurantService.getAll();
 	}
 
+	@Get(':id')
 	@ApiOperation({summary: "Zwraca restauracje o podanym id, w przypadku niepoprawnego id zwraca null"})
 	@ApiOkResponse({description: "Restauracja o podanym id lub null", type: Restaurant, isArray: false})
-	@Get(':id')
 	public async getById(@Param('id') id: number): Promise<Restaurant> {
 		return await this.restaurantService.getById(id);
 	}
 
+	@Put()
 	@ApiOperation({summary: "Dodaje restaurację do bazy danych"})
 	@ApiOkResponse({description: "Obiekt, ktory został dodany do bazy danych", type: Restaurant, isArray: false})
-	@Put()
 	public async add(@Body() restaurant: Restaurant): Promise<Restaurant> {
 		return await this.restaurantService.add(restaurant);
 	}
 
+	@Post(':id')
 	@ApiOperation({summary: "Edytuje restaurację o podanym id"})
 	@ApiOkResponse({schema: {
 		type: 'object',
@@ -37,11 +38,11 @@ export class RestaurantsController {
 			affected: { type: 'number',  description: 'Liczba zedytowanych restauracji'},
 		}
 	}})
-	@Post(':id')
 	public async edit(@Param('id') id: number, @Body() restaurant: Restaurant): Promise<UpdateResult> {
 		return await this.restaurantService.edit(id, restaurant);
 	}
 
+	@Delete(':id')
 	@ApiOperation({summary: "Usuwa restaurację o podanym id"})
 	@ApiOkResponse({schema: {
 		type: 'object',
@@ -49,7 +50,6 @@ export class RestaurantsController {
 			affected: { type: 'number',  description: 'Liczba usuniętych restauracji'},
 		}
 	}})
-	@Delete(':id')
 	public async delete(@Param('id') id: number): Promise<DeleteResult> {
 		return await this.restaurantService.delete(id);
 	}
