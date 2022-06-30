@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Restaurant as RestaurantModel } from '@prisma/client';
-import { NotFoundError } from 'rxjs';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AddRestaurantDto, EditRestaurantDto } from './restaurants.dto';
 
@@ -17,20 +16,20 @@ export class RestaurantsService {
 			where: { id: id }
 		});
 
-		if(result === undefined) {
-			throw NotFoundError;
+		if(!result) {
+			throw new NotFoundException();
 		}
 
 		return result;
 	}
 
 	public async deleteRestaurant(id: number): Promise<void> {
-		const result = this.prismaService.restaurant.delete({
+		const result = await this.prismaService.restaurant.deleteMany({
 			where: { id: id }
 		});
 
-		if(!result) {
-			throw NotFoundError;
+		if(result.count < 1) {
+			throw new NotFoundException();
 		}
 	}
 
@@ -45,7 +44,7 @@ export class RestaurantsService {
 		});
 
 		if(!result) {
-			throw NotFoundError;
+			throw new NotFoundException();
 		}
 	}
 
@@ -59,7 +58,7 @@ export class RestaurantsService {
 		});
 
 		if(!result) {
-			throw NotFoundError;
+			throw new NotFoundException();
 		}
 
 		return result.id;

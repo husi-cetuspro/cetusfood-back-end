@@ -13,7 +13,7 @@ model Restaurant {
     id Int @default(autoincrement()) @id
     name String
     email String
-    url String?
+    url String
     orders Order[]
 }
 

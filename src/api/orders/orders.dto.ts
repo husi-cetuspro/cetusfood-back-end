@@ -1,10 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class AddOrderDto {
     @ApiProperty({description: "ID Restauracji do której jest składane zamówienie"})
-    @IsString()
-    @IsNotEmpty()
+    @IsNumber()
     restaurantId: number;
 
     @ApiProperty({description: "Treść zamówienia"})
