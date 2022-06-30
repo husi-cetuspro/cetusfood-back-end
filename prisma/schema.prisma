@@ -1,0 +1,25 @@
+datasource db {
+    provider = "sqlite"
+    url = "file:./cetusfood.db"
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+// TODO: Use prisma to split models into seperate files
+
+model Restaurant {
+    id Int @default(autoincrement()) @id
+    name String
+    email String
+    url String?
+    orders Order[]
+}
+
+model Order {
+    id Int @default(autoincrement()) @id
+    restaurantId Int
+    content String
+    restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+}
