@@ -20,8 +20,8 @@ export class RestaurantsController {
 	@ApiOperation({summary: "Zwraca restauracje o podanym id, w przypadku niepoprawnego id zwraca -1"})
 	@ApiOkResponse({description: "Restauracja o podanym id", type: 'RestaurantModel', isArray: false})
 	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść restauracji o podanym id'})
-	public async getRestaurantById(@Param('id') id: number): Promise<RestaurantModel> {
-		return await this.restaurantService.getRestaurantById(id);
+	public async getRestaurantById(@Param('id') id: string): Promise<RestaurantModel> {
+		return await this.restaurantService.getRestaurantById(parseInt(id));
 	}
 
 	@Post()
@@ -35,15 +35,15 @@ export class RestaurantsController {
 	@ApiOperation({summary: "Edytuje restaurację o podanym id"})
 	@ApiOkResponse({description: 'Restauracja została pomyślnie zedytowana'})
 	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść restauracji o podanym id'})
-	public async editRestaurant(@Param('id') id: number, @Body() dto: EditRestaurantDto): Promise<void> {
-		return await this.restaurantService.editRestaurant(dto);
+	public async editRestaurant(@Param('id') id: string, @Body() dto: EditRestaurantDto): Promise<void> {
+		return await this.restaurantService.editRestaurant(parseInt(id), dto);
 	}
 
 	@Delete(':id')
 	@ApiOperation({summary: "Usuwa restaurację o podanym id"})
 	@ApiOkResponse({description: 'Restauracja została pomyślnie usunięta'})
 	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść restauracji o podanym id'})
-	public async deleteRestaurant(@Param('id') id: number): Promise<void> {
-		return await this.restaurantService.deleteRestaurant(id);
+	public async deleteRestaurant(@Param('id') id: string): Promise<void> {
+		return await this.restaurantService.deleteRestaurant(parseInt(id));
 	}
 }

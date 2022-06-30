@@ -13,9 +13,15 @@ export class RestaurantsService {
 	}
 
 	public async getRestaurantById(id: number): Promise<RestaurantModel> {
-		return this.prismaService.restaurant.findFirstOrThrow({
+		const result: RestaurantModel = await this.prismaService.restaurant.findFirst({
 			where: { id: id }
 		});
+
+		if(result === undefined) {
+			throw NotFoundError;
+		}
+
+		return result;
 	}
 
 	public async deleteRestaurant(id: number): Promise<void> {
@@ -28,12 +34,12 @@ export class RestaurantsService {
 		}
 	}
 
-	public async editRestaurant(dto: EditRestaurantDto): Promise<void> {
+	public async editRestaurant(id: number, dto: EditRestaurantDto): Promise<void> {
 		const result: RestaurantModel = await this.prismaService.restaurant.update({
-			where: {id: dto.id},
+			where: {id: id},
 			data: {
 				name: dto.name,
-				email: dto.mail,
+				email: dto.email,
 				url: dto.url,
 			}
 		});
@@ -47,7 +53,7 @@ export class RestaurantsService {
 		const result: RestaurantModel = await this.prismaService.restaurant.create({
 			data: {
 				name: dto.name,
-				email: dto.mail,
+				email: dto.email,
 				url: dto.url,
 			}
 		});

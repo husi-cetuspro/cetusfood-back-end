@@ -11,7 +11,7 @@ export class AddRestaurantDto {
     @ApiProperty({description: "Nowy mail restauracji"})
     @IsEmail()
     @IsNotEmpty()
-    mail: string
+    email: string
 
     @ApiPropertyOptional({description: "Nowy url strony restauracji"})
     @Optional()
@@ -19,10 +19,6 @@ export class AddRestaurantDto {
 }
 
 export class EditRestaurantDto {
-    @ApiProperty({description: "ID edytowanej restauracji"})
-    @IsNumber()
-    id: number;
-
     @ApiProperty({description: "Nowa nazwa restauracji"})
     @IsString()
     @IsNotEmpty()
@@ -31,7 +27,7 @@ export class EditRestaurantDto {
     @ApiProperty({description: "Nowy mail restauracji"})
     @IsEmail()
     @IsNotEmpty()
-    mail: string
+    email: string
 
     @ApiPropertyOptional({description: "Nowy url restauracji"})
     @Optional()
