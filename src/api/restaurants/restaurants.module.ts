@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { RestaurantsController } from './restaurants.controller';
-import { Restaurant } from './restaurant.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Restaurant])],
+	imports: [],
 	controllers: [RestaurantsController],
-	providers: [RestaurantsService]	
+	providers: [PrismaService, RestaurantsService]	
 })
 export class RestaurantsModule {}

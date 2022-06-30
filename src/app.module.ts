@@ -2,18 +2,13 @@ import { Module } from '@nestjs/common';
 import { RestaurantsModule } from './api/restaurants/restaurants.module';
 import { OrdersModule } from './api/orders/orders.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
 	imports: [
 		RestaurantsModule,
 		OrdersModule,
-		TypeOrmModule.forRoot({
-			type: 'sqlite',
-			database: 'cetusfood.sqlite',
-			entities: [__dirname + '/**/*.entity{.ts,.js}'],
-			synchronize: true
-		}),
 	],
-	providers: [],
+	providers: [PrismaService],
 })
 export class AppModule {}

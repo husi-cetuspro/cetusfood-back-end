@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Order } from './orders.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { AddOrderDto } from './orders.dto';
+import { Order as OrderModule } from '@prisma/client'
 
 @Injectable()
 export class OrdersService {
-	constructor(@InjectRepository(Order) private readonly repository: Repository<Order>) {}
+	constructor(private readonly prismaService: PrismaService) {}
 
-	public async add(Order: Order): Promise<Order> {
-		const date: Date = new Date();
-		if((date.getHours() == 12 && date.getMinutes()>= 50)||(date.getHours()>12))
-			return null;
+	public async addOrder(dto: AddOrderDto): Promise<number> {
+		const result: OrderModule = await this.prismaService.order.create({data: {
+			restaurantId: dto.restaurantId,
+			content: dto.content,
+		}});
 
-		return this.repository.save(Order);
+		return result.id;
 	}
 }

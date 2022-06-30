@@ -1,32 +1,61 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult, DeleteResult } from 'typeorm';
-import { Restaurant } from './restaurant.entity';
+import { Restaurant as RestaurantModel } from '@prisma/client';
+import { NotFoundError } from 'rxjs';
+import { PrismaService } from '../../prisma/prisma.service';
+import { AddRestaurantDto, EditRestaurantDto } from './restaurants.dto';
 
 @Injectable()
 export class RestaurantsService {
-	constructor(@InjectRepository(Restaurant) private readonly repository: Repository<Restaurant>) {}
+	constructor(private readonly prismaService: PrismaService) {}
 
-	public async getAllRestaurants(): Promise<Restaurant[]> {
-		return await this.repository.find();
+	public async getAllRestaurants(): Promise<RestaurantModel[]> {
+		return this.prismaService.restaurant.findMany();
 	}
 
-	public async getRestaurantById(id: number): Promise<Restaurant> {
-		return await this.repository.findOne({
-			where: [ {id: id} ],
+	public async getRestaurantById(id: number): Promise<RestaurantModel> {
+		return this.prismaService.restaurant.findFirstOrThrow({
+			where: { id: id }
 		});
 	}
 
-	public async deleteRestaurant(id: number): Promise<DeleteResult> {
-		return await this.repository.delete(id);
+	public async deleteRestaurant(id: number): Promise<void> {
+		const result = this.prismaService.restaurant.delete({
+			where: { id: id }
+		});
+
+		if(!result) {
+			throw NotFoundError;
+		}
 	}
 
-	public async editRestaurant(id: number, restaurant: Restaurant): Promise<UpdateResult> {
-		return await this.repository.update(id, restaurant);
+	public async editRestaurant(dto: EditRestaurantDto): Promise<void> {
+		const result: RestaurantModel = await this.prismaService.restaurant.update({
+			where: {id: dto.id},
+			data: {
+				name: dto.name,
+				email: dto.mail,
+				url: dto.url,
+			}
+		});
+
+		if(!result) {
+			throw NotFoundError;
+		}
 	}
 
-	// TODO: zwroc samo id
-	public async addRestaurant(restaurant: Restaurant): Promise<Restaurant> {
-		return this.repository.save(restaurant);
+	public async addRestaurant(dto: AddRestaurantDto): Promise<number> {
+		const result: RestaurantModel = await this.prismaService.restaurant.create({
+			data: {
+				name: dto.name,
+				email: dto.mail,
+				url: dto.url,
+			}
+		});
+
+		if(!result) {
+			throw NotFoundError;
+		}
+
+		return result.id;
 	}
 }
