@@ -17,11 +17,18 @@ export class RestaurantsController {
 	}
 
 	@Get(':id')
-	@ApiOperation({summary: "Zwraca restauracje o podanym id, w przypadku niepoprawnego id zwraca -1"})
+	@ApiOperation({summary: "Zwraca restauracje o podanym id, w przypadku niepoprawnego id zwraca blad 404"})
 	@ApiOkResponse({description: "Restauracja o podanym id", type: 'RestaurantModel', isArray: false})
 	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść restauracji o podanym id'})
 	public async getRestaurantById(@Param('id') id: string): Promise<RestaurantModel> {
-		return await this.restaurantService.getRestaurantById(parseInt(id));
+		return await this.restaurantService.getRestaurantById(id);
+	}
+
+	@Get('/name/:name')
+	@ApiOperation({summary: "Zwraca restauracje o podanym id"})
+	@ApiOkResponse({description: "Restauracje pasujace do podanej nazwy", type: 'RestaurantModel', isArray: true})
+	public async getRestaurantByName(@Param('name') name: string): Promise<RestaurantModel[]> {
+		return await this.restaurantService.getRestaurantsByName(name);
 	}
 
 	@Post()

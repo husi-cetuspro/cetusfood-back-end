@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Restaurant as RestaurantModel } from '@prisma/client';
+import { Restaurant, Restaurant as RestaurantModel } from '@prisma/client';
+import { isNumber } from 'class-validator';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AddRestaurantDto, EditRestaurantDto } from './restaurants.dto';
 
@@ -11,9 +12,9 @@ export class RestaurantsService {
 		return this.prismaService.restaurant.findMany();
 	}
 
-	public async getRestaurantById(id: number): Promise<RestaurantModel> {
+	public async getRestaurantById(id: string): Promise<RestaurantModel> {
 		const result: RestaurantModel = await this.prismaService.restaurant.findFirst({
-			where: { id: id }
+			where: { id: parseInt(id) }
 		});
 
 		if(!result) {
@@ -21,6 +22,10 @@ export class RestaurantsService {
 		}
 
 		return result;
+	}
+
+	public async getRestaurantsByName(name: string): Promise<RestaurantModel[]> {
+		return await this.prismaService.$queryRawUnsafe(`SELECT * FROM Restaurant WHERE name LIKE '%${name}%';`);
 	}
 
 	public async deleteRestaurant(id: number): Promise<void> {
