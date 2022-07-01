@@ -1,8 +1,11 @@
-import { Post, Param, Delete, Body, Put, Get, Controller } from '@nestjs/common';
+import { Post, Param, Delete, Body, Put, Get, Controller, UploadedFile, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, } from '@nestjs/swagger';
 import { Restaurant as RestaurantModel } from '@prisma/client'
 import { AddRestaurantDto, EditRestaurantDto } from './restaurants.dto';
+import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+
 
 @ApiTags('restaurants')
 @Controller('restaurants')
@@ -32,10 +35,19 @@ export class RestaurantsController {
 	}
 
 	@Post()
+	@UseInterceptors(FileInterceptor('image', {
+		storage: diskStorage(
+			{
+
+			}
+		)
+	
+	}))
 	@ApiOperation({summary: "Dodaje restaurację do bazy danych"})
 	@ApiOkResponse({description: "ID restauracji, ktora została dodana do bazy danych", type: 'integer', isArray: false})
-	public async addRestaurant(@Body() dto: AddRestaurantDto): Promise<number> {
+	public async addRestaurant(@Body() dto: AddRestaurantDto, @UploadedFile() file): Promise<number> {
 		return await this.restaurantService.addRestaurant(dto);
+		
 	}
 
 	@Put(':id')
