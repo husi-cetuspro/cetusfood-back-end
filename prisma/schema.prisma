@@ -11,10 +11,10 @@ generator client {
 
 model Restaurant {
     id Int @default(autoincrement()) @id
+    orders Order[]
     name String
     email String
     url String
-    orders Order[]
 }
 
 model Order {
