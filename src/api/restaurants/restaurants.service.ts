@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Restaurant, Restaurant as RestaurantModel } from '@prisma/client';
-import { isNumber } from 'class-validator';
+import { Restaurant as RestaurantModel } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AddRestaurantDto, EditRestaurantDto } from './restaurants.dto';
 

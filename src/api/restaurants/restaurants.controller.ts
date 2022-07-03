@@ -35,14 +35,7 @@ export class RestaurantsController {
 	}
 
 	@Post()
-	@UseInterceptors(FileInterceptor('image', {
-		storage: diskStorage(
-			{
-
-			}
-		)
-	
-	}))
+	@UseInterceptors(FileInterceptor('image', { storage: diskStorage({}) }))
 	@ApiOperation({summary: "Dodaje restaurację do bazy danych"})
 	@ApiOkResponse({description: "ID restauracji, ktora została dodana do bazy danych", type: 'integer', isArray: false})
 	public async addRestaurant(@Body() dto: AddRestaurantDto, @UploadedFile() file): Promise<number> {

@@ -24,8 +24,9 @@ model Order {
     restaurant Restaurant @relation(fields: [restaurantId], references: [id])
 }
 
-model User {
+model Account {
     id Int @default(autoincrement()) @id
     email String @unique
-    pasword String
+    password String
+    isConfirmed Boolean @default(false)
 }
