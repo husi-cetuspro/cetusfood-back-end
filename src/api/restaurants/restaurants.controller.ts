@@ -20,7 +20,7 @@ export class RestaurantsController {
 	}
 
 	@Get(':id')
-	@ApiOperation({summary: "Zwraca restauracje o podanym id, w przypadku niepoprawnego id zwraca blad 404"})
+	@ApiOperation({summary: "Zwraca restauracje o podanym id, w przypadku niepoprawnego id zwraca błąd 404"})
 	@ApiOkResponse({description: "Restauracja o podanym id", type: 'RestaurantModel', isArray: false})
 	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść restauracji o podanym id'})
 	public async getRestaurantById(@Param('id') id: string): Promise<RestaurantModel> {
@@ -28,8 +28,8 @@ export class RestaurantsController {
 	}
 
 	@Get('/name/:name')
-	@ApiOperation({summary: "Zwraca restauracje o podanym id"})
-	@ApiOkResponse({description: "Restauracje pasujace do podanej nazwy", type: 'RestaurantModel', isArray: true})
+	@ApiOperation({summary: "Zwraca liste restauracji pasujących do podanej nazwy"})
+	@ApiOkResponse({description: "Lista restauracji pasujących do podanej nazwy", type: 'RestaurantModel', isArray: true})
 	public async getRestaurantByName(@Param('name') name: string): Promise<RestaurantModel[]> {
 		return await this.restaurantService.getRestaurantsByName(name);
 	}

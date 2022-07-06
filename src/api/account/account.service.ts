@@ -25,4 +25,12 @@ export class AccountService {
 	public async getAllAccounts(): Promise<AccountModel[]> {
 		return await this.prismaService.account.findMany();
 	}
+
+	public async findAccountByEmail(email: string): Promise<AccountModel> {
+		return await this.prismaService.account.findFirst({
+			where: {
+				email: email
+			}
+		});
+	}
 }
