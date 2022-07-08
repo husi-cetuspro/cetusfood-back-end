@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Restaurant as RestaurantModel } from '@prisma/client';
-import { PrismaService } from '../../prisma/prisma.service';
-import { AddRestaurantDto, EditRestaurantDto } from './restaurants.dto';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { AddRestaurantDto, EditRestaurantDto } from '../admin/admin.restaurants.dto';
 
 @Injectable()
-export class RestaurantsService {
+export class UserRestaurantsService {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	public async getAllRestaurants(): Promise<RestaurantModel[]> {
