@@ -1,8 +1,7 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddOrderDto } from './user.orders.dto';
 import { Order as OrderModel } from '@prisma/client'
-import { JwtPayload } from 'src/auth/jwt.payload';
 
 @Injectable()
 export class UserOrdersService {
@@ -18,9 +17,5 @@ export class UserOrdersService {
 		});
 
 		return result.id;
-	}
-
-	public async getAllOrders(): Promise<OrderModel[]> {
-		return await this.prismaService.order.findMany();
 	}
 }
