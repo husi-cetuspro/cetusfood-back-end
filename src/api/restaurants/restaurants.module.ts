@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common';
-import { RestaurantsService } from './restaurants.service';
-import { RestaurantsController } from './restaurants.controller';
+import { UserRestaurantsController } from './user/user.restaurants.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MulterModule } from '@nestjs/platform-express';
+import { UserRestaurantsService } from './user/user.restaurants.service';
+import { AdminRestaurantsService } from './admin/admin.restaurants.service';
+import { AdminRestaurantsController } from './admin/admin.restaurants.controller';
 
 @Module({
 	imports: [MulterModule.register({
 		dest: './logoFiles',
 	})],
-	controllers: [RestaurantsController],
-	providers: [PrismaService, RestaurantsService]	
+	controllers: [UserRestaurantsController, AdminRestaurantsController],
+	providers: [PrismaService, UserRestaurantsService, AdminRestaurantsService]	
 })
 export class RestaurantsModule {}

@@ -7,26 +7,37 @@ generator client {
     provider = "prisma-client-js"
 }
 
-// TODO: Use prisma to split models into seperate files
-
 model Restaurant {
     id Int @default(autoincrement()) @id
     name String @unique
     email String @unique
     url String @unique
+    logoUrl String?
     orders Order[]
 }
 
 model Order {
     id Int @default(autoincrement()) @id
+    accountId Int
     restaurantId Int
     content String
     restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+    account Account @relation(fields: [accountId], references: [id])
 }
 
 model Account {
     id Int @default(autoincrement()) @id
     email String @unique
     password String
-    isConfirmed Boolean @default(false)
+    role String
+    orders Order[]
+}
+
+model UserLogins {
+    id Int @default(autoincrement()) @id
+    accountId Int
+    refreshToken String @unique
+    expires DateTime
+    role String @default("user")
+    createdAt DateTime @default(now())
 }
