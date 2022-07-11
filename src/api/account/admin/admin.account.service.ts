@@ -13,7 +13,7 @@ export class AdminAccountService {
 	}	
 	
 	public async registerAdminAccount(dto: RegisterAccountDto): Promise<number> {
-		if(dto.password !== dto.confirmPassword) {
+		if(dto.password !== dto.confirmationPassword) {
 			throw new BadRequestException("Pole confirmPassword nie jest równe polu password");
 		}
 

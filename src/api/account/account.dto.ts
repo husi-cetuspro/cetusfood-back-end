@@ -16,5 +16,5 @@ export class RegisterAccountDto {
 	@ApiProperty()
 	@IsString()
 	@IsNotEmpty()
-	confirmPassword: string;
+	confirmationPassword: string;
 }

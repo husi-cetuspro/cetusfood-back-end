@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Response } from 'express'
 import { randomBytes } from 'crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -6,20 +7,25 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt.payload';
 import { ConfigService } from '@nestjs/config';
 import { SignInDto } from './auth.dto';
+import { Account as AccountModel } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly prismaService: PrismaService, private readonly jwtService: JwtService, private readonly configService: ConfigService) {}
 	
 	public async signIn(dto: SignInDto, res: Response): Promise<string> {
-		const acc = await this.prismaService.account.findFirst({
-			where: {
-				email: dto.email,
-			}
-		});
+		let acc = null;
+		try {
+			acc = await this.prismaService.account.findFirstOrThrow({
+				where: {
+					email: dto.email,
+				}
+			});
+		} catch(ex) {
+			throw new BadRequestException("Konto o takim emailu nie istnieje!");
+		}
 		
 		if(!acc) {
-			throw new BadRequestException("Konto o takim emailu nie istnieje!");
 		}
 		
 		if(!bcrypt.compareSync(dto.password, acc.password)) {
@@ -30,7 +36,7 @@ export class AuthService {
 		const rt = this.getRefreshToken();
 		await this.updateAccountRefreshToken(rt, acc.id, acc.role);
 		
-		res["cookie"]("refreshToken", rt, {maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
+		res.cookie("refreshToken", rt, {maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
 		return at;
 	}
 
@@ -41,7 +47,7 @@ export class AuthService {
 					refreshToken: refreshToken,
 				}
 			})
-			res["clearCookie"]("refreshToken");
+			res.clearCookie("refreshToken");
 		} catch(err) {
 			throw new BadRequestException("Nie możesz się wylogować, bo nie jesteś zalogowany");
 		}
@@ -63,8 +69,8 @@ export class AuthService {
 			const newRt = this.getRefreshToken();
 
 			await this.updateAccountRefreshToken(newRt, session.accountId, session.role, session.refreshToken);
-
-			res["cookie"]("refreshToken", newRt, { maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
+			
+			res.cookie("refreshToken", newRt, { maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
 
 			return at;
 		} catch(ex) {
@@ -109,6 +115,14 @@ export class AuthService {
 					accountId: accId,
 				}
 			})
+		}
+	}
+	
+	public async getRole(req: Request): Promise<string> {
+		try {
+			return req["user"].role;
+		} catch {
+			return "invalid";
 		}
 	}
 }

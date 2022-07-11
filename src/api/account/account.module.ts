@@ -9,4 +9,6 @@ import { PublicAccountService } from './public/public.account.service';
   controllers: [PublicAccountController, AdminAccountController],
   providers: [PrismaService, PublicAccountService, AdminAccountService]
 })
-export class AccountModule {}
+export class AccountModule {
+
+}

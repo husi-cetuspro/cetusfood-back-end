@@ -3,12 +3,12 @@ import { Post, Param, Delete, Body, Put, Get, Controller, UploadedFile, UseInter
 import { AdminRestaurantsService } from './admin.restaurants.service';
 import { ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, } from '@nestjs/swagger';
 import { AddRestaurantDto, EditRestaurantDto } from './admin.restaurants.dto';
-import { IsUserGuard } from 'src/auth/user.guard';
+import { IsAdminGuard } from 'src/auth/admin.guard';
 
-@UseGuards(IsUserGuard)
+@UseGuards(IsAdminGuard)
 @ApiBearerAuth()
 @Controller('admin/restaurants')
-@ApiTags('USER - restaurants')
+@ApiTags('ADMIN - restaurants')
 export class AdminRestaurantsController {
 	constructor(private readonly restaurantService: AdminRestaurantsService) {}
 
