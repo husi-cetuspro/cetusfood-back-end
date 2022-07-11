@@ -1,7 +1,7 @@
 import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Account as AccountModel } from '@prisma/client';
-import { RegisterAccountDto } from '../public.account.dto';
+import { RegisterAccountDto } from '../account.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

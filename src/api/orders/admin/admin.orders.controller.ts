@@ -5,9 +5,9 @@ import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags, } from '@nestjs/sw
 import { Order as OrderModel } from '@prisma/client'
 import { IsAdminGuard } from 'src/auth/admin.guard';
 
-@Controller('admin/orders')
 @ApiBearerAuth()
 @UseGuards(IsAdminGuard)
+@Controller('admin/orders')
 @ApiTags('ADMIN - order')
 export class AdminOrdersController {
 	constructor(private readonly ordersService: AdminOrdersService) {}

@@ -1,5 +1,5 @@
-import { BadRequestException, ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
-import { RegisterAccountDto } from '../public.account.dto';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
+import { RegisterAccountDto } from '../account.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Account as AccountModel } from '@prisma/client';
@@ -20,7 +20,7 @@ export class PublicAccountService {
 				data: {
 					email: dto.email,
 					password: hash,
-					role: dto.email == "admin@cetusfood.com" ? "admin" : "user" // Note: To jest tymczasowe
+					role: "user"
 				}
 			});
 

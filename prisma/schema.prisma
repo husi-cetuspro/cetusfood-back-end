@@ -7,8 +7,6 @@ generator client {
     provider = "prisma-client-js"
 }
 
-// TODO: Use prisma to split models into seperate files
-
 model Restaurant {
     id Int @default(autoincrement()) @id
     name String @unique
@@ -40,6 +38,6 @@ model UserLogins {
     accountId Int
     refreshToken String @unique
     expires DateTime
-    role String @default("employee")
+    role String @default("user")
     createdAt DateTime @default(now())
 }

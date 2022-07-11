@@ -4,10 +4,10 @@ import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTag
 import { Restaurant as RestaurantModel } from '@prisma/client'
 import { IsUserGuard } from 'src/auth/user.guard';
 
-@UseGuards(IsUserGuard)
 @ApiBearerAuth()
 @Controller('user/restaurants')
 @ApiTags('USER - restaurants')
+@UseGuards(IsUserGuard)
 export class UserRestaurantsController {
 	constructor(private readonly restaurantService: UserRestaurantsService) {}
 

@@ -4,7 +4,6 @@ import { OrdersModule } from './api/orders/orders.module';
 import { PrismaService } from './prisma/prisma.service';
 import { AccountModule } from './api/account/account.module';
 import { AuthService } from './auth/auth.service';
-import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';

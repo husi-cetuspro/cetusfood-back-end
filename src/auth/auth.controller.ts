@@ -25,8 +25,7 @@ export class AuthController {
 	@ApiOkResponse({description: "Użytkownik został wylogowany"})
 	@ApiBadRequestResponse({description: "Użytkownik nie był zalogowany"})
 	public async logout(@Req() req: Request, @Res({passthrough: true}) res: Response) {
-		Logger.log(req["cookies"]);
-		return await this.authService.logOut(req["cookies"]["refreshToken"]);	
+		return await this.authService.logOut(req["cookies"]["refreshToken"], res);	
 	}
 
 	@Post('/signin')

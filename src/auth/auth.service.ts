@@ -34,48 +34,49 @@ export class AuthService {
 		return at;
 	}
 
-	public async logOut(refreshToken: string) {
+	public async logOut(refreshToken: string, res: Response) {
 		try {
 			await this.prismaService.userLogins.delete({
 				where: {
 					refreshToken: refreshToken,
 				}
 			})
+			res["clearCookie"]("refreshToken");
 		} catch(err) {
 			throw new BadRequestException("Nie możesz się wylogować, bo nie jesteś zalogowany");
 		}
 	}
 
-    public async refreshToken(refreshToken: string, res: Response): Promise<string> {
-        try {
-            const session = await this.prismaService.userLogins.findFirst({
-                where: {
-                    refreshToken: refreshToken,
-                },
-                select: {
-                    accountId: true,
-                    role: true,
-                    refreshToken: true,
-                }
-            })
-            
-            const at = await this.getAccessToken(session.accountId, session.role);
-            const newRt = this.getRefreshToken();
-            
-            await this.updateAccountRefreshToken(newRt, session.accountId, session.role, session.refreshToken);
-            
+	public async refreshToken(refreshToken: string, res: Response): Promise<string> {
+		try {
+			const session = await this.prismaService.userLogins.findFirst({
+				where: {
+				    refreshToken: refreshToken,
+				},
+				select: {
+				    accountId: true,
+				    role: true,
+				    refreshToken: true,
+				}
+			})
+			const at = await this.getAccessToken(session.accountId, session.role);
+			const newRt = this.getRefreshToken();
+
+			await this.updateAccountRefreshToken(newRt, session.accountId, session.role, session.refreshToken);
+
 			res["cookie"]("refreshToken", newRt, { maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
-            return at;
-        } catch(ex) {
-            throw new UnauthorizedException("Niepoprawny refresh token");
-        }
-    }
+
+			return at;
+		} catch(ex) {
+		    throw new UnauthorizedException("Niepoprawny refresh token");
+		}
+	}
 	
 	private async getAccessToken(accId: number, role: string): Promise<string> {
-        const jwtPayload: JwtPayload = {
-            accId: accId,
-            role: role
-        }
+		const jwtPayload: JwtPayload = {
+		    accId: accId,
+		    role: role
+		}
 
 		return await this.jwtService.signAsync(jwtPayload, {
 			secret: this.configService.get<string>("AT_SECRET"),

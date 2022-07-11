@@ -19,7 +19,7 @@ export class AtGuard extends AuthGuard("jwt") {
         if(req.headers?.authorization === undefined) {
             throw new UnauthorizedException("Authorization token nie został podany (prawdopodobnie jesteś niezalogowany)");
         }
-        
+
         return super.canActivate(context);
     }
 }
