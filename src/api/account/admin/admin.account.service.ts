@@ -2,11 +2,12 @@ import { BadRequestException, ForbiddenException, Injectable, InternalServerErro
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Account as AccountModel } from '@prisma/client';
 import { RegisterAccountDto } from '../account.dto';
-import * as bcrypt from 'bcrypt';
+import { SharedAccountService } from '../shared/shared.account.service';
+import { Role } from 'src/role.enum';
 
 @Injectable()
 export class AdminAccountService implements OnModuleInit {
-	constructor(private readonly prismaService: PrismaService) {}
+	constructor(private readonly prismaService: PrismaService, private readonly sharedAccountService: SharedAccountService) {}
 
 	onModuleInit() {
 		this.registerAdminAccount({
@@ -21,30 +22,6 @@ export class AdminAccountService implements OnModuleInit {
 	}	
 	
 	public async registerAdminAccount(dto: RegisterAccountDto): Promise<number> {
-		if(dto.password !== dto.confirmationPassword) {
-			throw new BadRequestException("Pole confirmPassword nie jest równe polu password");
-		}
-		
-		try {
-			const accountExists: boolean = await this.prismaService.account.count({where: { email: dto.email }}) > 0;
-			if(accountExists) {
-				return;
-			}
-
-			const salt: string = bcrypt.genSaltSync(10);
-			const hash: string = bcrypt.hashSync(dto.password, salt);
-			
-			const result: AccountModel = await this.prismaService.account.create({
-				data: {
-					email: dto.email,
-					password: hash,
-					role: "admin"
-				}
-			});
-
-			return result.id;
-		} catch(ex) {
-			throw new InternalServerErrorException("Wystąpił problem podczas rejestrowania użytkownika");
-		}
+		return await this.sharedAccountService.registerAccount(dto, Role.ADMIN, false);
 	}
 }
