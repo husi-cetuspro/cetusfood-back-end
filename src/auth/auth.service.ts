@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
 import { Response } from 'express'
 import { randomBytes } from 'crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,13 +7,13 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt.payload';
 import { ConfigService } from '@nestjs/config';
 import { SignInDto } from './auth.dto';
-import { Account as AccountModel } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly prismaService: PrismaService, private readonly jwtService: JwtService, private readonly configService: ConfigService) {}
 	
 	public async signIn(dto: SignInDto, res: Response): Promise<string> {
+		Logger.log(`Użytkownik o mailu ${dto.email} próbuje się zalogować`);
 		let acc = null;
 		try {
 			acc = await this.prismaService.account.findFirstOrThrow({
@@ -25,9 +25,6 @@ export class AuthService {
 			throw new BadRequestException("Konto o takim emailu nie istnieje!");
 		}
 		
-		if(!acc) {
-		}
-		
 		if(!bcrypt.compareSync(dto.password, acc.password)) {
 			throw new BadRequestException("Podane niepoprawne hasło");
 		}
@@ -37,6 +34,9 @@ export class AuthService {
 		await this.updateAccountRefreshToken(rt, acc.id, acc.role);
 		
 		res.cookie("refreshToken", rt, {maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
+		
+		Logger.log(`Użytkownik o mailu ${dto.email} właśnie się zalogował`);
+		
 		return at;
 	}
 
@@ -95,7 +95,9 @@ export class AuthService {
 	}
 
 	private async updateAccountRefreshToken(rt: string, accId: number, role: string, oldToken?: string) {
-		const date = new Date();
+		const expirationDate: Date = new Date();
+		expirationDate.setTime(expirationDate.getTime() + 60 * 24 * 60 * 60 * 1000);
+
 		try {
 			await this.prismaService.userLogins.update({
 				where: {
@@ -103,14 +105,14 @@ export class AuthService {
 				},
 				data: {
 					refreshToken: rt,
-					expires: new Date(date.getDate() + 60).toISOString()
+					expires: expirationDate
 				},
 			})
 		} catch(ex) {
 			await this.prismaService.userLogins.create({
 				data: {
 					refreshToken: rt,
-					expires: new Date(date.getDate() + 60).toISOString(),
+					expires: expirationDate,
 					role: role,
 					accountId: accId,
 				}
@@ -122,7 +124,7 @@ export class AuthService {
 		try {
 			return req["user"].role;
 		} catch {
-			return "invalid";
+			return "???";
 		}
 	}
 }

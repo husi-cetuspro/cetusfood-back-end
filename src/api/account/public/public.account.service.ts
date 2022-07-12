@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { RegisterAccountDto } from '../account.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -13,21 +13,23 @@ export class PublicAccountService {
 			throw new BadRequestException("Pole confirmationPassword nie jest równe polu password");
 		}
 
-		try {
-			const salt: string = bcrypt.genSaltSync(10);
-			const hash: string = bcrypt.hashSync(dto.password, salt);
-			
-			const result: AccountModel = await this.prismaService.account.create({
-				data: {
-					email: dto.email,
-					password: hash,
-					role: "user"
-				}
-			});
-
-			return result.id;
-		} catch(ex) {
-			throw new BadRequestException();
+		const accountExists: boolean = await this.prismaService.account.count({where: { email: dto.email }}) > 0;
+		if(accountExists) {
+			throw new BadRequestException("Konto o takim mailu już istnieje");
 		}
+		
+		const salt: string = bcrypt.genSaltSync(10);
+		const hash: string = bcrypt.hashSync(dto.password, salt);
+		
+		const result: AccountModel = await this.prismaService.account.create({
+			data: {
+				email: dto.email,
+				password: hash,
+				role: "user"
+			}
+		});
+		
+		Logger.log(`Konto o mailu ${dto.email} zostało właśnie zarejestrowane`);
+		return result.id;
 	}
 }
