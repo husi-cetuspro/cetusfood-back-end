@@ -1,12 +1,21 @@
-import { BadRequestException, NotFoundException, ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Account as AccountModel } from '@prisma/client';
 import { RegisterAccountDto } from '../account.dto';
-import * as bcrypt from 'bcrypt';
+import { SharedAccountService } from '../shared/shared.account.service';
+import { Role } from 'src/role.enum';
 
 @Injectable()
-export class AdminAccountService {
-	constructor(private readonly prismaService: PrismaService) {}
+export class AdminAccountService implements OnModuleInit {
+	constructor(private readonly prismaService: PrismaService, private readonly sharedAccountService: SharedAccountService) {}
+
+	onModuleInit() {
+		this.registerAdminAccount({
+			email: "admin@cetusfood.com",
+			password: "admin123",
+			confirmationPassword: "admin123",
+		});
+	}
 
 	public async getAllAccounts(): Promise<AccountModel[]> {
 		return await this.prismaService.account.findMany();
@@ -24,24 +33,6 @@ export class AdminAccountService {
 
 
 	public async registerAdminAccount(dto: RegisterAccountDto): Promise<number> {
-		if(dto.password !== dto.confirmationPassword) {
-			throw new BadRequestException("Pole confirmPassword nie jest równe polu password");
-		}
-
-		try {
-			const salt: string = bcrypt.genSaltSync(10);
-			const hash: string = bcrypt.hashSync(dto.password, salt);
-			const result: AccountModel = await this.prismaService.account.create({
-				data: {
-					email: dto.email,
-					password: hash,
-					role: "admin"
-				}
-			});
-
-			return result.id;
-		} catch(ex) {
-			throw new ForbiddenException("Konto o takim emailu już istnieje");
-		}
+		return await this.sharedAccountService.registerAccount(dto, Role.ADMIN, false);
 	}
 }

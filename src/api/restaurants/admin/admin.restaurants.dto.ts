@@ -21,13 +21,9 @@ export class AddRestaurantDto {
 
 export class EditRestaurantDto {
     @ApiProperty({description: "Nowa nazwa restauracji"})
-    @IsString()
-    @IsNotEmpty()
     name?: string;
 
     @ApiProperty({description: "Nowy mail restauracji"})
-    @IsEmail()
-    @IsNotEmpty()
     email?: string
 
     @ApiProperty({description: "Nowy url restauracji"})
