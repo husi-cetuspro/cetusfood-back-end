@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Account as AccountModel } from '@prisma/client';
-import { RegisterAccountDto } from '../account.dto';
+import { RegisterAccountDto } from '../shared/shared.account.dto';
 import { SharedAccountService } from '../shared/shared.account.service';
 import { Role } from 'src/role.enum';
+import { BlockAccountDto } from './admin.dto';
 
 @Injectable()
 export class AdminAccountService implements OnModuleInit {
@@ -29,6 +30,15 @@ export class AdminAccountService implements OnModuleInit {
 		if(result.count < 1) {
 			throw new NotFoundException(`Nie znaleziono użytkowmnika o podanym id (${id})`);
 		}
+	}
+
+	public async blockAccount(id: number, dto: BlockAccountDto): Promise<void> {
+		await this.prismaService.bannedAccounts.create({
+			data: {
+				accountID: id,
+				expirationDate: dto.expirationDate
+			}
+		});
 	}
 
 

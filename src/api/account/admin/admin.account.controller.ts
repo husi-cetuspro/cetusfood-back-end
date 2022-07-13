@@ -1,8 +1,9 @@
-import { Get, Body, Controller, Post, HttpCode, BadRequestException, HttpStatus, Req, Res, UseGuards, Delete, Param } from '@nestjs/common';
+import { Get, Body, Controller, Post, HttpCode, BadRequestException, HttpStatus, Req, Res, UseGuards, Delete, Param, Put } from '@nestjs/common';
 import { Account as AccountModel } from '@prisma/client';
 import { ApiTags, ApiOperation, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { IsAdminGuard } from 'src/auth/admin.guard';
 import { AdminAccountService } from './admin.account.service';
+import { BlockAccountDto } from './admin.dto';
 
 @Controller('admin/account')
 @UseGuards(IsAdminGuard)
@@ -18,6 +19,15 @@ export class AdminAccountController {
 	public async getAllAccounts(): Promise<AccountModel[]> {
 		return await this.accountService.getAllAccounts();
 	}
+
+	@Post()
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Blokuje uzytkownika"})
+	@ApiOkResponse({description: `Zablokowano użytkownika`})
+	public async blockAccount(@Param('id') id: string, @Body() dto: BlockAccountDto): Promise<void> {
+		return await this.accountService.blockAccount(parseInt(id), dto);
+	}
+
 
 	@Delete(':id')
 	@HttpCode(HttpStatus.OK)

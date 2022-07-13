@@ -1,5 +1,5 @@
 import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
-import { RegisterAccountDto } from '../account.dto';
+import { RegisterAccountDto } from '../shared/shared.account.dto';
 import { PublicAccountService } from './public.account.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBadRequestResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Public } from 'src/auth/public.decorator';

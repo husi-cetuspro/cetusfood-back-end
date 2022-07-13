@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterAccountDto } from '../account.dto';
+import { RegisterAccountDto } from '../shared/shared.account.dto';
 import { SharedAccountService } from '../shared/shared.account.service';
 import { Role } from 'src/role.enum';
 

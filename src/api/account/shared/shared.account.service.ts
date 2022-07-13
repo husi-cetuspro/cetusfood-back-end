@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import * as bcrypt from 'bcrypt';
-import { RegisterAccountDto } from "../account.dto";
-import { Account as AccountModel } from '@prisma/client';
+import { RegisterAccountDto } from "../shared/shared.account.dto";
+import { Account as AccountModel, BannedAccounts } from '@prisma/client';
+
 import { PrismaService } from "src/prisma/prisma.service";
 import { Role } from "src/role.enum";
 

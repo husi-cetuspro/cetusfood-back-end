@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Response } from 'express'
 import { randomBytes } from 'crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt.payload';
 import { ConfigService } from '@nestjs/config';
 import { SignInDto } from './auth.dto';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -15,14 +16,32 @@ export class AuthService {
 	public async signIn(dto: SignInDto, res: Response): Promise<string> {
 		Logger.log(`Użytkownik o mailu ${dto.email} próbuje się zalogować`);
 		let acc = null;
-		try {
+		try{
 			acc = await this.prismaService.account.findFirstOrThrow({
 				where: {
 					email: dto.email,
 				}
 			});
 		} catch(ex) {
-			throw new BadRequestException("Konto o takim emailu nie istnieje!");
+			throw new NotFoundException('Konto o takim mailu nie istnieje');
+		}
+
+		const ban = await this.prismaService.bannedAccounts.findFirst({
+			where: {
+				accountID: acc.id,
+			}
+		});
+
+		if(ban) {
+			if(ban.expirationDate <= new Date()) {
+				this.prismaService.bannedAccounts.delete({
+					where: {
+						id: ban.id
+					}
+				})
+			} else {
+				throw new ForbiddenException(`Twoje konto zostało zablokowane. Data wygaśnięcia blokady: ${ban.expirationDate}`);
+			}
 		}
 		
 		if(!bcrypt.compareSync(dto.password, acc.password)) {

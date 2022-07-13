@@ -26,6 +26,13 @@ CREATE TABLE "Account" (
 );
 
 -- CreateTable
+CREATE TABLE "BannedAccounts" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "accountID" INTEGER NOT NULL,
+    "expirationDate" DATETIME NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "UserLogins" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "accountId" INTEGER NOT NULL,
@@ -46,6 +53,9 @@ CREATE UNIQUE INDEX "Restaurant_url_key" ON "Restaurant"("url");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_email_key" ON "Account"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "BannedAccounts_accountID_key" ON "BannedAccounts"("accountID");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserLogins_refreshToken_key" ON "UserLogins"("refreshToken");
