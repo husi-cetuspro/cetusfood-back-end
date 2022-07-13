@@ -9,4 +9,10 @@ export class AdminOrdersService {
 	public async getAllOrders(): Promise<OrderModel[]> {
 		return await this.prismaService.order.findMany();
 	}
+
+	public async getOrderById(id: number): Promise<OrderModel> {
+		return await this.prismaService.order.findFirst({
+				where: { id: id }
+			});
+	}
 }

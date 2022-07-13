@@ -20,6 +20,24 @@ export class AdminAccountService implements OnModuleInit {
 	public async getAllAccounts(): Promise<AccountModel[]> {
 		return await this.prismaService.account.findMany();
 	}	
+
+	public async getAccountById(id: number) {
+		const acc = await this.prismaService.account.findFirst({
+			where: { id: id }
+		});
+
+		if(!acc){
+			throw new NotFoundException('Nie znaleziono konta o podanym id');
+		}
+
+		return acc;
+	}
+
+	public async getAccountByEmail(email: string): Promise<AccountModel> {
+		return await this.prismaService.account.findFirst({
+			where: { email: email }
+		});
+	}
 	
 	public async deleteAccount(id: number): Promise<void> {
 		const result = await this.prismaService.account.deleteMany({

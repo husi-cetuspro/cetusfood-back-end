@@ -1,6 +1,6 @@
 import { Get, Body, Controller, Post, HttpCode, BadRequestException, HttpStatus, Req, Res, UseGuards, Delete, Param } from '@nestjs/common';
 import { Account as AccountModel } from '@prisma/client';
-import { ApiTags, ApiOperation, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiBearerAuth, ApiNotFoundResponse } from '@nestjs/swagger';
 import { IsAdminGuard } from 'src/auth/admin.guard';
 import { AdminAccountService } from './admin.account.service';
 
@@ -17,6 +17,21 @@ export class AdminAccountController {
 	@ApiOkResponse({description: "Lista kont", type: 'AccountModel', isArray: true})
 	public async getAllAccounts(): Promise<AccountModel[]> {
 		return await this.accountService.getAllAccounts();
+	}
+
+	@Get(':id')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Zwraca użytkownika o podanym id"})
+	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść użytkownika o podanym id'})
+	public async getAccountById(@Param('id') id: string) {
+		return await this.accountService.getAccountById(parseInt(id));
+	}
+
+	@Get('/email/:email')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Zwraca użytkownika o podanym mailu"})
+	public async getAccountByEmail(@Param('email') email: string): Promise<AccountModel> {
+		return await this.accountService.getAccountByEmail(email);
 	}
 
 	@Delete(':id')
