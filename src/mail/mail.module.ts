@@ -11,11 +11,11 @@ import { ScheduleModule } from '@nestjs/schedule';
   imports: [
     MailerModule.forRoot({
       transport: {
-        host: 'serwer2142781.home.pl',
+        host: '',
         port: 465,
         secure: true,
         auth: {
-          user: 'cetusfood@erzeszowiak.pl',
+          user: '',
           pass: '',
         },
       },

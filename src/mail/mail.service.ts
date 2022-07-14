@@ -91,7 +91,7 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to,
-        from: 'cetusfood@erzeszowiak.pl',
+        from: '',
         subject,
         template: templateName,
         context: templateContext,
