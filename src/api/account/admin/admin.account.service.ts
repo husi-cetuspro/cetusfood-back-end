@@ -33,10 +33,8 @@ export class AdminAccountService implements OnModuleInit {
 		return acc;
 	}
 
-	public async getAccountByEmail(email: string): Promise<AccountModel> {
-		return await this.prismaService.account.findFirst({
-			where: { email: email }
-		});
+	public async getAccountsByEmail(email: string): Promise<AccountModel[]> {
+		return await this.prismaService.$queryRawUnsafe(`SELECT * FROM Account WHERE email LIKE '%${email}%'`)
 	}
 
 	public async editAccount(id: number, dto: EditAccountDto): Promise<void> {

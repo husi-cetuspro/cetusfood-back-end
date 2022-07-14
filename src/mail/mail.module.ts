@@ -16,7 +16,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         secure: true,
         auth: {
           user: 'cetusfood@erzeszowiak.pl',
-          pass: 'C3tu$F@@d2020',
+          pass: '',
         },
       },
       defaults: {

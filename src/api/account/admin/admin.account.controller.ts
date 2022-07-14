@@ -31,8 +31,8 @@ export class AdminAccountController {
 	@Get('/email/:email')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Zwraca użytkownika o podanym mailu"})
-	public async getAccountByEmail(@Param('email') email: string): Promise<AccountModel> {
-		return await this.accountService.getAccountByEmail(email);
+	public async getAccountByEmail(@Param('email') email: string): Promise<AccountModel[]> {
+		return await this.accountService.getAccountsByEmail(email);
 	}
 
 	@Put(':id')

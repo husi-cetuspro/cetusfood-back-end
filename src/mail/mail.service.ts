@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { EmailTemplates } from './emailTemplates';
-import { Cron } from '@nestjs/schedule';
+import { Cron, Timeout } from '@nestjs/schedule';
 
 @Injectable()
 export class MailService {
@@ -78,6 +78,7 @@ export class MailService {
   }
 
   @Cron('0 8 * * 1-5')
+  // @Timeout(1000)
   triggerReminderEmail() {
     const userEmails = ['maciejknowak5@gmail.com'];
     const userNames = ['Maciej Nowak'];
