@@ -1,8 +1,9 @@
-import { Get, Body, Controller, Post, HttpCode, BadRequestException, HttpStatus, Req, Res, UseGuards, Delete, Param } from '@nestjs/common';
+import { Get, Body, Controller, Post, HttpCode, BadRequestException, HttpStatus, Req, Res, UseGuards, Delete, Param, Put, Logger } from '@nestjs/common';
 import { Account as AccountModel } from '@prisma/client';
 import { ApiTags, ApiOperation, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiBearerAuth, ApiNotFoundResponse } from '@nestjs/swagger';
 import { IsAdminGuard } from 'src/auth/admin.guard';
 import { AdminAccountService } from './admin.account.service';
+import { EditAccountDto } from '../account.dto';
 
 @Controller('admin/account')
 @UseGuards(IsAdminGuard)
@@ -32,6 +33,14 @@ export class AdminAccountController {
 	@ApiOperation({summary: "Zwraca użytkownika o podanym mailu"})
 	public async getAccountByEmail(@Param('email') email: string): Promise<AccountModel> {
 		return await this.accountService.getAccountByEmail(email);
+	}
+
+	@Put(':id')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Edytuje użytkownika o podanym id"})
+	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść użytkownika o podanym id'})
+	public async editAccount(@Param('id') id: string,@Body() dto: EditAccountDto) {
+		return await this.accountService.editAccount(parseInt(id), dto);
 	}
 
 	@Delete(':id')
