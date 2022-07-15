@@ -6,12 +6,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Account as AccountModel, Order as OrderModel, Restaurant as RestaurantModel } from '@prisma/client'
 
 @Injectable()
-export class MailService implements OnModuleInit {
+export class MailService {
   constructor(private readonly mailerService: MailerService, private readonly prismaService: PrismaService) {}
-
-  public onModuleInit() {
-    this.triggerOrders();
-  }
 
   @Cron('0 8 * * 1-5')
   async remindUsersAboutOrder() {
@@ -41,19 +37,19 @@ export class MailService implements OnModuleInit {
   async sendOrdersToRestaurant(orders: OrderModel[], restaurant: RestaurantModel) {
     Logger.log(`Wysyłanie zamówień do ${restaurant.email} (${restaurant.name})`);
 
-    /*
-    this.sendemail(
+    const ordersContent = orders.map(order => order.content.split('|'));
+
+    this.sendEmail(
       EmailTemplates.orders,
       {
         orders: {
-          orders: orders,
+          orders: ordersContent,
           restaurant: restaurant,
         },
       },
       'Zamówienie',
       restaurant.email
     );
-    */
   }
 
   @Cron('0 13 * * 1-5')
