@@ -18,3 +18,11 @@ export class RegisterAccountDto {
 	@IsNotEmpty()
 	confirmationPassword: string;
 }
+
+export class EditAccountDto {
+	@ApiProperty({description: "Nowy email użytkownika"})
+	email?: string;
+
+	@ApiProperty({description: "Nowa rola użytkownika"})
+	role?: string;
+}

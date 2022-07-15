@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Account as AccountModel } from '@prisma/client';
-import { RegisterAccountDto } from '../account.dto';
+import { RegisterAccountDto, EditAccountDto } from '../account.dto';
 import { SharedAccountService } from '../shared/shared.account.service';
 import { Role } from 'src/role.enum';
 
@@ -20,6 +20,43 @@ export class AdminAccountService implements OnModuleInit {
 	public async getAllAccounts(): Promise<AccountModel[]> {
 		return await this.prismaService.account.findMany();
 	}	
+
+	public async getAccountById(id: number) {
+		const acc = await this.prismaService.account.findFirst({
+			where: { id: id }
+		});
+
+		if(!acc){
+			throw new NotFoundException('Nie znaleziono konta o podanym id');
+		}
+
+		return acc;
+	}
+
+	public async getAccountsByEmail(email: string): Promise<AccountModel[]> {
+		return await this.prismaService.$queryRawUnsafe(`SELECT * FROM Account WHERE email LIKE '%${email}%'`)
+	}
+
+	public async editAccount(id: number, dto: EditAccountDto): Promise<void> {
+		try {
+			const result: AccountModel = await this.prismaService.account.update({
+				where: { id: id},
+				data: {
+					email: dto.email,
+					role: dto.role,
+				}
+			});
+
+			this.prismaService.userLogins.deleteMany({
+				where: { 
+					accountId: id
+				}
+			});
+		} catch (error) {
+			Logger.error(error)
+			throw new NotFoundException('Nie znaleziono konta o podanym id')
+		}
+	}
 	
 	public async deleteAccount(id: number): Promise<void> {
 		const result = await this.prismaService.account.deleteMany({
