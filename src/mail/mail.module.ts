@@ -1,26 +1,30 @@
-import { MailerModule } from '@nestjs-modules/mailer';
+import { MailerModule, MailerService } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { Global, Module } from '@nestjs/common';
+import { Global, Module, OnModuleInit } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Global()
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env'
+    }),
     MailerModule.forRoot({
       transport: {
-        host: 'serwer2142781.home.pl',
-        port: 465,
-        secure: true,
+        host: process.env.MAIL_HOST,
+        port: process.env.MAIL_PORT,
+        secure: false,
         auth: {
-          user: 'cetusfood@erzeszowiak.pl',
-          pass: 'C3tu$F@@d2020',
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PSWD,
         },
       },
       defaults: {
-        from: `"CetusFood" <${process.env.MAIL_NO_REPLY}>`,
+        from: `"CetusFood"`,
       },
       template: {
         dir: join(__dirname, './templates'),
@@ -31,9 +35,8 @@ import { ScheduleModule } from '@nestjs/schedule';
       },
     }),
     ScheduleModule.forRoot(),
-    ConfigModule.forRoot(),
   ],
-  providers: [MailService],
-  exports: [MailService],
+  providers: [PrismaService, MailService],
 })
-export class MailModule {}
+export class MailModule {
+}

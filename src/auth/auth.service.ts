@@ -46,7 +46,7 @@ export class AuthService {
 				where: {
 					refreshToken: refreshToken,
 				}
-			})
+			});
 			res.clearCookie("refreshToken");
 		} catch(err) {
 			throw new BadRequestException("Nie możesz się wylogować, bo nie jesteś zalogowany");

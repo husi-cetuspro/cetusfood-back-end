@@ -326,12 +326,12 @@
               <td style="text-align: center;">
                 <div class="text-author" style="dispaly: flex;"> 
                   {{!-- <ul style="list-style: none;">
-                    {{#each orders.list_of_orders}}
-                      <li>{{this}}</li>
+                    {{#each orders.orders}}
+                      <li>{{this.content}}</li>
                     {{/each}}
                   </ul> --}}
                   {{!--#each cntxt.list_of_orders--}}
-                  {{#each orders.list_of_orders}}
+                  {{#each orders.orders}}
                     <span style="margin: 0 15px">{{this}}</span>
                   {{/each}}
                 </div>

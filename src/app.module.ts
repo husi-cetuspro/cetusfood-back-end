@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { AtGuard } from './auth/at.guard';
+import { MailModule } from './mail/mail.module';
 
 @Module({
 	imports: [
@@ -18,6 +19,7 @@ import { AtGuard } from './auth/at.guard';
 		AuthModule,
 		JwtModule,
 		ConfigModule.forRoot({envFilePath: '.env'}),
+		MailModule,
 	],
 	providers: [
 		Reflector,
@@ -27,7 +29,7 @@ import { AtGuard } from './auth/at.guard';
 		{
 			provide: APP_GUARD,
 			useClass: AtGuard
-		}	
+		},
 	],
 })
 export class AppModule {}
