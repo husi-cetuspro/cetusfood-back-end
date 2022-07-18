@@ -4,10 +4,12 @@ import { RegisterAccountDto } from "../account.dto";
 import { Account as AccountModel } from '@prisma/client';
 import { PrismaService } from "src/prisma/prisma.service";
 import { Role } from "src/role.enum";
+import { MailService } from "src/mail/mail.service"
 
 @Injectable()
 export class SharedAccountService {
-    constructor(private readonly prismaService: PrismaService) {}
+    constructor(private readonly mailService: MailService, private readonly prismaService: PrismaService) {
+    }
 
     public genHashPassword(pswd: string): string {
         const salt: string = bcrypt.genSaltSync(10);
@@ -30,7 +32,7 @@ export class SharedAccountService {
             }
             return;
 		}
-		
+
 		const result: AccountModel = await this.prismaService.account.create({
 			data: {
 				email: dto.email,
@@ -38,6 +40,10 @@ export class SharedAccountService {
 				role: role
 			}
 		});
+
+        if(role === "user") {
+            this.mailService.verifyUserAccount(dto.email);
+        }
 		
 		Logger.log(`Konto o mailu ${dto.email} zostało właśnie zarejestrowane z rolą ${role}`);
 		return result.id;

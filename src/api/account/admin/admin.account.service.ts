@@ -4,6 +4,7 @@ import { Account as AccountModel } from '@prisma/client';
 import { RegisterAccountDto, EditAccountDto } from '../account.dto';
 import { SharedAccountService } from '../shared/shared.account.service';
 import { Role } from 'src/role.enum';
+import { contains } from 'class-validator';
 
 @Injectable()
 export class AdminAccountService implements OnModuleInit {
@@ -34,7 +35,11 @@ export class AdminAccountService implements OnModuleInit {
 	}
 
 	public async getAccountsByEmail(email: string): Promise<AccountModel[]> {
-		return await this.prismaService.$queryRawUnsafe(`SELECT * FROM Account WHERE email LIKE '%${email}%'`)
+		return await this.prismaService.account.findMany({
+			where: {
+					email: { contains: email }
+			}
+		});
 	}
 
 	public async editAccount(id: number, dto: EditAccountDto): Promise<void> {

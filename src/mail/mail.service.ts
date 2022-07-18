@@ -66,16 +66,6 @@ export class MailService {
     })
   }
 
-  public async triggerVerifyEmail(accountId: number) {
-    const account: AccountModel = await this.prismaService.account.findFirst({
-      where: {
-        id: accountId 
-      }
-    });
-
-    this.verifyUserAccount(account.email);
-  }
-
   private async sendEmail(templateName: EmailTemplates, templateContext: any, subject: string, to: string) {
     try {
       await this.mailerService.sendMail({
