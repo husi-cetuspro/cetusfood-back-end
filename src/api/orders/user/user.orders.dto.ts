@@ -6,8 +6,11 @@ export class AddOrderDto {
     @IsNumber()
     restaurantId: number;
 
-    @ApiProperty({description: "Treść zamówienia"})
-    @IsString()
-    @IsNotEmpty()
-    content: string;
+}
+
+export class OrderItem {
+    @ApiProperty({description: "ID Restauracji do której jest składane zamówienie"})
+    @IsNumber()
+    productId: number;
+    count: number;
 }

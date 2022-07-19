@@ -1,7 +1,9 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Restaurant as RestaurantModel } from '@prisma/client';
+import { Product as ProductModel } from '@prisma/client';
+import { debugPort } from 'process';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { AddRestaurantDto, EditRestaurantDto } from './admin.restaurants.dto';
+import { AddRestaurantDto, EditRestaurantDto, AddProduct } from './admin.restaurants.dto';
 
 @Injectable()
 export class AdminRestaurantsService {
@@ -47,6 +49,8 @@ export class AdminRestaurantsService {
 					logoUrl: dto.logoUrl || "",
 				}
 			});
+	
+
 
 			Logger.log(`Restauracja ${result.name} została dodana, id: ${result.id}`);
 			return result.id;
@@ -55,4 +59,36 @@ export class AdminRestaurantsService {
 			throw new BadRequestException('Tworzenie restauracji się nie powiodło (prawdopodobnie restauracja o podanej nazwie, emailu lub url już istnieje"');
 		}
 	}
+
+	public async AddProduct(dto: AddProduct): Promise<number> {
+		try {
+			const result: ProductModel = await this.prismaService.product.create({
+				data: {
+					name: dto.name,
+					price: dto.price,
+					logoUrl: dto.logoUrl,
+					restaurantId: dto.restaurantID,
+				}
+			});
+			Logger.log(`Produkt ${result.name} został dodany, id: ${result.id}`);
+			return result.id
+		} catch(ex) {
+			Logger.error(ex);
+			throw new BadRequestException('Dodanie produktu sie nie powiodło (prawdopodobnie restauracja o podanej nazwie lub url już istnieje"');
+		}
+
+	}
+
+	public async deleteProduct(id: number): Promise<void> {
+		try {
+			const result = await this.prismaService.product.delete({
+				where: { id: id }
+			});
+
+			Logger.log(`Produkt ${result.name} został usunięty`);
+		} catch {
+			throw new NotFoundException();
+		}
+	}
+
 }

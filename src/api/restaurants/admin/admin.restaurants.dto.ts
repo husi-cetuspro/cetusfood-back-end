@@ -32,3 +32,17 @@ export class EditRestaurantDto {
     @ApiProperty({description: "Nowy url loga restauracji"})
     logoUrl?: string
 }
+
+export class AddProduct {
+    @ApiProperty({description: "Nazwa Produktu"})
+    name?: string;
+
+    @ApiProperty({description: "Cena Produktu"})
+    price?: number
+    
+    @ApiProperty({description: "URL Obrazka Produktu"})
+    logoUrl?: string
+
+    @ApiProperty({description: "ID Restauracji w ktorej znajduje sie produkt"})
+    restaurantID?: number
+}

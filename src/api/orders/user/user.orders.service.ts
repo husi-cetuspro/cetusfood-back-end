@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddOrderDto } from './user.orders.dto';
-import { Order as OrderModel } from '@prisma/client'
+import { Order as OrderModel } from '@prisma/client';
+import { ApiNoContentResponse } from '@nestjs/swagger';
 
 @Injectable()
 export class UserOrdersService {
@@ -17,13 +18,15 @@ export class UserOrdersService {
 			throw new BadRequestException('Nie można składać zamówień po godzinie 12:50');
 		}
 
+
 		const result: OrderModel = await this.prismaService.order.create({
 			data: {
 				accountId: accId,
-				restaurantId: dto.restaurantId,
-				content: dto.content,
+				restaurantId: dto.restaurantId,			
 			}
 		});
+
+
 
 		return result.id;
 	}
