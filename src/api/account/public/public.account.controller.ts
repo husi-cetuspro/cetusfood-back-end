@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, Param, Get } from '@nestjs/common';
 import { RegisterAccountDto } from '../account.dto';
 import { PublicAccountService } from './public.account.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBadRequestResponse, ApiBearerAuth } from '@nestjs/swagger';
@@ -17,5 +17,13 @@ export class PublicAccountController {
 	@ApiBadRequestResponse({description: "pole confirmationPassword nie jest równe polu password"})
 	public async registerAccount(@Body() dto: RegisterAccountDto): Promise<number> {
 		return await this.accountService.registerAccount(dto);
+	}
+
+
+	@Get('/verify/:guid')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Weryfikuje konto"})
+	public async verifyAccount(@Param('guid') guid: string) {
+		return await this.accountService.verifyAccount(guid);
 	}
 }
