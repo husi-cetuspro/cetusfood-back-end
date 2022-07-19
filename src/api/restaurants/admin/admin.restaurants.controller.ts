@@ -48,7 +48,7 @@ export class AdminRestaurantsController {
 		return await this.restaurantService.AddProduct(dto);
 	}
 
-	@Delete('/product:id')
+	@Delete('/product/:id')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Usuwa produkt o podanym id"})
 	@ApiOkResponse({description: 'Produkt został pomyślnie usunięty'})
