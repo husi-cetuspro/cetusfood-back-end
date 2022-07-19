@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, Param, Get } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, Param, Get, Logger } from '@nestjs/common';
 import { RegisterAccountDto } from '../account.dto';
 import { PublicAccountService } from './public.account.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBadRequestResponse, ApiBearerAuth } from '@nestjs/swagger';
@@ -19,11 +19,11 @@ export class PublicAccountController {
 		return await this.accountService.registerAccount(dto);
 	}
 
-
-	@Get('/verify/:guid')
+	@Post('/verify/:guid')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Weryfikuje konto"})
 	public async verifyAccount(@Param('guid') guid: string) {
+		Logger.log(guid);
 		return await this.accountService.verifyAccount(guid);
 	}
 }

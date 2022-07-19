@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { RegisterAccountDto } from '../account.dto';
 import { SharedAccountService } from '../shared/shared.account.service';
 import { Role } from 'src/role.enum';
