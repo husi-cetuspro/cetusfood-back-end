@@ -25,4 +25,7 @@ export class EditAccountDto {
 
 	@ApiProperty({description: "Nowa rola użytkownika"})
 	role?: string;
+
+	@ApiProperty({description: "Zatwierdzenie użytkownika"})
+	isAccepted?: boolean;
 }

@@ -62,6 +62,20 @@ export class AdminAccountService implements OnModuleInit {
 			throw new NotFoundException('Nie znaleziono konta o podanym id')
 		}
 	}
+
+	public async acceptUser(id: number, dto: EditAccountDto): Promise<void> {
+		try {
+			const result: AccountModel = await this.prismaService.account.update({
+				where: { id: id },
+				data: {
+					isAccepted: dto.isAccepted,
+				}
+			})
+		} catch (error) {
+			Logger.error(error)
+			throw new NotFoundException('Nie znaleziono konta do weryfikacji')
+		}
+	}
 	
 	public async deleteAccount(id: number): Promise<void> {
 		const result = await this.prismaService.account.deleteMany({
