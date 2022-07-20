@@ -42,6 +42,26 @@ export class AdminAccountService implements OnModuleInit {
 		});
 	}
 
+	public async getVerifiedUsers(id: number): Promise<AccountModel[]> {
+		return await this.prismaService.account.findMany({
+			where: {
+				id: id,
+				isVerified : true,
+				isAccepted : false,
+			}
+		});
+	}
+
+	public async getAcceptedUsers(id: number): Promise<AccountModel[]> {
+		return await this.prismaService.account.findMany({
+			where: {
+				id: id,
+				isVerified: true,
+				isAccepted : true,
+			}
+		});
+	}
+
 	public async editAccount(id: number, dto: EditAccountDto): Promise<void> {
 		try {
 			const result: AccountModel = await this.prismaService.account.update({

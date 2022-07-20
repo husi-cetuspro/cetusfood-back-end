@@ -35,6 +35,20 @@ export class AdminAccountController {
 		return await this.accountService.getAccountsByEmail(email);
 	}
 
+	@Get('isVerified')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Zwraca zweryfikowanych użytkowników"})
+	public async getVerifiedUsers(@Param('id', ParseIntPipe) id: number): Promise<AccountModel[]> {
+		return await this.accountService.getVerifiedUsers(id);
+	}
+
+	@Get('isAccepted')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Zwraca zaakceptowanych użytkowników"})
+	public async getAcceptedUsers(@Param('id', ParseIntPipe) id: number): Promise<AccountModel[]> {
+		return await this.accountService.getAcceptedUsers(id);
+	}
+
 	@Put(':id')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Edytuje użytkownika o podanym id"})
