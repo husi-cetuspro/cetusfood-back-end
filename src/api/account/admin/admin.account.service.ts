@@ -62,7 +62,6 @@ export class AdminAccountService implements OnModuleInit {
 		});
 	}
 
-
 	public async editAccount(id: number, dto: EditAccountDto): Promise<void> {
 		try {
 			const result: AccountModel = await this.prismaService.account.update({
