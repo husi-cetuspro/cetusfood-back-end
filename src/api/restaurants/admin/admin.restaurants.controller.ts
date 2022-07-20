@@ -2,7 +2,7 @@
 import { Post, Param, Delete, Body, Put, Get, Controller, UploadedFile, UseInterceptors, UploadedFiles, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { AdminRestaurantsService } from './admin.restaurants.service';
 import { ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, } from '@nestjs/swagger';
-import { AddProduct, AddRestaurantDto, EditRestaurantDto } from './admin.restaurants.dto';
+import { AddProduct, AddRestaurantDto, EditRestaurantDto, EditProduct } from './admin.restaurants.dto';
 import { IsAdminGuard } from 'src/auth/admin.guard';
 
 @UseGuards(IsAdminGuard)
@@ -55,6 +55,15 @@ export class AdminRestaurantsController {
 	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść produktu o podanym id'})
 	public async deleteProduct(@Param('id') id: string): Promise<void> {
 		return await this.restaurantService.deleteProduct(parseInt(id));
+	}
+
+	@Put('/product/:id')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Edytuje produkt o podanym id"})
+	@ApiOkResponse({description: 'Produkt został pomyślnie zedytowany'})
+	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść restauracji o podanym id'})
+	public async editProduct(@Param('id') id: string, @Body() dto: EditProduct): Promise<void> {
+		return await this.restaurantService.editProduct(parseInt(id), dto);
 	}
 
 

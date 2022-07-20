@@ -3,7 +3,7 @@ import { Restaurant as RestaurantModel } from '@prisma/client';
 import { Product as ProductModel } from '@prisma/client';
 import { debugPort } from 'process';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { AddRestaurantDto, EditRestaurantDto, AddProduct } from './admin.restaurants.dto';
+import { AddRestaurantDto, EditRestaurantDto, AddProduct, EditProduct } from './admin.restaurants.dto';
 
 @Injectable()
 export class AdminRestaurantsService {
@@ -74,10 +74,29 @@ export class AdminRestaurantsService {
 			return result.id
 		} catch(ex) {
 			Logger.error(ex);
-			throw new BadRequestException('Dodanie produktu sie nie powiodło (prawdopodobnie restauracja o podanej nazwie lub url już istnieje"');
+			throw new BadRequestException('Dodanie produktu sie nie powiodło');
 		}
 
 	}
+
+	public async editProduct(id: number, dto: EditProduct): Promise<void> {
+		const result: ProductModel = await this.prismaService.product.update({
+			where: {id: id},
+			data: {
+				name: dto.name,
+				price: dto.price,
+				logoUrl: dto.logoUrl,
+				restaurantId: dto.restaurantID,
+			}
+		});
+
+		if(!result) {
+			throw new NotFoundException();
+		}
+
+		Logger.log(`Produkt ${result.name} został zedytowany`);
+	}
+
 
 	public async deleteProduct(id: number): Promise<void> {
 		try {

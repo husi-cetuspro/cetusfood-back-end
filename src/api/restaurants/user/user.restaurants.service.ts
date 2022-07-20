@@ -45,6 +45,8 @@ export class UserRestaurantsService {
 		}
 	}
 
+
+
 	public async editRestaurant(id: number, dto: EditRestaurantDto): Promise<void> {
 		const result: RestaurantModel = await this.prismaService.restaurant.update({
 			where: {id: id},
