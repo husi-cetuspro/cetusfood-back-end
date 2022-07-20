@@ -49,6 +49,7 @@ export class AdminAccountController {
 		return await this.accountService.getAcceptedUsers(id);
 	}
 
+
 	@Put(':id')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Edytuje użytkownika o podanym id"})
