@@ -37,7 +37,7 @@ model Product {
     name String
     price Float
     restaurantId Int
-    logoUrl String
+    logoUrl String 
     restaurant Restaurant @relation(fields: [restaurantId], references: [id])
 }
 
