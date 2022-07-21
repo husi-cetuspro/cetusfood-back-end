@@ -1,7 +1,7 @@
 import { Param, Get, Controller, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { UserRestaurantsService } from './user.restaurants.service';
 import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, } from '@nestjs/swagger';
-import { Restaurant as RestaurantModel } from '@prisma/client'
+import { Product, Restaurant as RestaurantModel } from '@prisma/client'
 import { IsUserGuard } from 'src/auth/user.guard';
 
 @ApiBearerAuth()
@@ -17,6 +17,14 @@ export class UserRestaurantsController {
 	@ApiOkResponse({description: "Wszystkie restauracje w bazie danych", type: 'RestaurantModel', isArray: true})
 	public async getAllRestaurants(): Promise<RestaurantModel[]> {
 		return await this.restaurantService.getAllRestaurants();
+	}
+
+	@Get('products/:id')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Zwraca liste wszystkich produktów w restauracji"})
+	@ApiOkResponse({description: "Wszystkie restauracje w bazie danych", type: 'ProductModel', isArray: true})
+	public async getAllProducts(@Param('id') id: string): Promise<Product[]> {
+		return await this.restaurantService.getAllProducts(parseInt(id));
 	}
 
 	@Get(':id')

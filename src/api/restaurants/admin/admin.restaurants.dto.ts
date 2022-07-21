@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class AddRestaurantDto {
     @ApiProperty({description: "Nazwa restauracji"})
@@ -31,4 +31,40 @@ export class EditRestaurantDto {
     
     @ApiProperty({description: "Nowy url loga restauracji"})
     logoUrl?: string
+}
+
+export class AddProduct {
+    @ApiProperty({description: "Nazwa Produktu"})
+    @IsString()
+    @IsNotEmpty()
+    name?: string;
+
+    @ApiProperty({description: "Cena Produktu"})
+    price?: number
+    
+    @ApiProperty({description: "URL Obrazka Produktu"})
+    @IsString()
+    @IsNotEmpty()
+    logoUrl?: string
+
+    @ApiProperty({description: "ID Restauracji w ktorej znajduje sie produkt"})
+    restaurantID?: number
+}
+
+
+export class EditProduct {
+    @ApiProperty({description: "Nazwa Produktu"})
+    @IsString()
+    name?: string;
+
+    @ApiProperty({description: "Cena Produktu"})
+    @IsNumber()
+    price?: number
+    
+    @ApiProperty({description: "URL Obrazka Produktu"})
+    @IsString()
+    logoUrl?: string
+
+    @ApiProperty({description: "ID Restauracji w ktorej znajduje sie produkt"})
+    restaurantID: number
 }

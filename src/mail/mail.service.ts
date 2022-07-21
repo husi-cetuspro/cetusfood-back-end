@@ -41,7 +41,8 @@ export class MailService {
   async sendOrdersToRestaurant(orders: OrderModel[], restaurant: RestaurantModel) {
     Logger.log(`Wysyłanie zamówień do ${restaurant.email} (${restaurant.name})`);
 
-    const ordersContent = orders.map(order => order.content.split('|'));
+    // const ordersContent = orders.map(order => order..split('|'));
+    const ordersContent = [""];
 
     this.sendEmail(
       EmailTemplates.orders,
