@@ -61,8 +61,8 @@ export class AdminAccountController {
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Akceptacja użytkownika przez admina o podanym id"})
 	@ApiNotFoundResponse({description: "Nie ma użytkownika o podanym id"})
-	public async acceptUser(@Param('id', ParseIntPipe) id: number,@Body() dto: EditAccountDto) {
-		return await this.accountService.acceptUser(id, dto);
+	public async acceptUser(@Param('id', ParseIntPipe) id: number) {
+		return await this.accountService.acceptUser(id);
 	}
 
 	@Delete(':id')

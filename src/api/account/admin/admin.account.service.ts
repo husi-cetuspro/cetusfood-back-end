@@ -45,7 +45,6 @@ export class AdminAccountService implements OnModuleInit {
 	public async getVerifiedUsers(id: number): Promise<AccountModel[]> {
 		return await this.prismaService.account.findMany({
 			where: {
-				id: id,
 				isVerified : true,
 				isAccepted : false,
 			}
@@ -55,7 +54,6 @@ export class AdminAccountService implements OnModuleInit {
 	public async getAcceptedUsers(id: number): Promise<AccountModel[]> {
 		return await this.prismaService.account.findMany({
 			where: {
-				id: id,
 				isVerified: true,
 				isAccepted : true,
 			}
@@ -83,17 +81,20 @@ export class AdminAccountService implements OnModuleInit {
 		}
 	}
 
-	public async acceptUser(id: number, dto: EditAccountDto): Promise<void> {
+	public async acceptUser(id: number): Promise<void> {
 		try {
 			const result: AccountModel = await this.prismaService.account.update({
-				where: { id: id },
+				where: { 
+					id: id,
+				},
 				data: {
-					isAccepted: dto.isAccepted,
+					isAccepted: true,
 				}
 			})
+			Logger.log(`Zaakceptowano użytkownika`);
 		} catch (error) {
-			Logger.error(error)
-			throw new NotFoundException('Nie znaleziono konta do weryfikacji')
+			Logger.error(error);
+			throw new NotFoundException('Nie znaleziono konta do akceptacji');
 		}
 	}
 	
