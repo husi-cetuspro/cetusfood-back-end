@@ -13,16 +13,32 @@ model Restaurant {
     email String @unique
     url String? @unique
     logoUrl String?
-    orders Order[]
+    products Product[] 
 }
 
 model Order {
     id Int @default(autoincrement()) @id
     accountId Int
     restaurantId Int
-    content String
-    restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+    items OrderItem[]
     account Account @relation(fields: [accountId], references: [id])
+}
+
+model OrderItem {
+    id Int @default(autoincrement()) @id
+    orderId Int
+    productId Int
+    count Int
+    order Order @relation(fields: [orderId], references: [id])
+}
+
+model Product {
+    id Int @default(autoincrement()) @id
+    name String
+    price Float
+    restaurantId Int
+    logoUrl String 
+    restaurant Restaurant @relation(fields: [restaurantId], references: [id])
 }
 
 model Account {

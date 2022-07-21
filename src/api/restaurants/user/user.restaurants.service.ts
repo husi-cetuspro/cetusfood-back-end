@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Restaurant as RestaurantModel } from '@prisma/client';
+import { Product as ProductModel } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AddRestaurantDto, EditRestaurantDto } from '../admin/admin.restaurants.dto';
 
@@ -9,6 +10,13 @@ export class UserRestaurantsService {
 
 	public async getAllRestaurants(): Promise<RestaurantModel[]> {
 		return this.prismaService.restaurant.findMany();
+	}
+
+	
+	public async getAllProducts(restaurantId: number): Promise<Array<ProductModel>> {
+		return await this.prismaService.product.findMany({
+			where: { restaurantId: restaurantId }
+		});
 	}
 
 	public async getRestaurantById(id: string): Promise<RestaurantModel> {
@@ -40,6 +48,8 @@ export class UserRestaurantsService {
 			throw new NotFoundException();
 		}
 	}
+
+
 
 	public async editRestaurant(id: number, dto: EditRestaurantDto): Promise<void> {
 		const result: RestaurantModel = await this.prismaService.restaurant.update({
