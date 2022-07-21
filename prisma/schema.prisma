@@ -46,7 +46,7 @@ model Account {
     email String @unique
     password String
     isVerified Boolean @default(false)
-    verificationCode String @unique
+    isAccepted Boolean @default(false)
     role String
     orders Order[]
 }

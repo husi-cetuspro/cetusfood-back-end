@@ -1,4 +1,4 @@
-import { Get, Body, Controller, Post, HttpCode, BadRequestException, HttpStatus, Req, Res, UseGuards, Delete, Param, Put, Logger } from '@nestjs/common';
+import { Get, Body, Controller, Post, HttpCode, BadRequestException, HttpStatus, Req, Res, UseGuards, Delete, Param, Put, Logger, ParseIntPipe } from '@nestjs/common';
 import { Account as AccountModel } from '@prisma/client';
 import { ApiTags, ApiOperation, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiBearerAuth, ApiNotFoundResponse } from '@nestjs/swagger';
 import { IsAdminGuard } from 'src/auth/admin.guard';
@@ -24,8 +24,8 @@ export class AdminAccountController {
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Zwraca użytkownika o podanym id"})
 	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść użytkownika o podanym id'})
-	public async getAccountById(@Param('id') id: string) {
-		return await this.accountService.getAccountById(parseInt(id));
+	public async getAccountById(@Param('id', ParseIntPipe) id: number) {
+		return await this.accountService.getAccountById(id);
 	}
 
 	@Get('/email/:email')
@@ -35,12 +35,34 @@ export class AdminAccountController {
 		return await this.accountService.getAccountsByEmail(email);
 	}
 
+	@Get('isVerified')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Zwraca zweryfikowanych użytkowników"})
+	public async getVerifiedUsers(@Param('id', ParseIntPipe) id: number): Promise<AccountModel[]> {
+		return await this.accountService.getVerifiedUsers(id);
+	}
+
+	@Get('isAccepted')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Zwraca zaakceptowanych użytkowników"})
+	public async getAcceptedUsers(@Param('id', ParseIntPipe) id: number): Promise<AccountModel[]> {
+		return await this.accountService.getAcceptedUsers(id);
+	}
+
 	@Put(':id')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Edytuje użytkownika o podanym id"})
-	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść użytkownika o podanym id'})
+	@ApiNotFoundResponse({description: "Serwer nie mógł znaleść użytkownika o podanym id"})
 	public async editAccount(@Param('id') id: string,@Body() dto: EditAccountDto) {
 		return await this.accountService.editAccount(parseInt(id), dto);
+	}
+
+	@Put('isAccepted/:id')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Akceptacja użytkownika przez admina o podanym id"})
+	@ApiNotFoundResponse({description: "Nie ma użytkownika o podanym id"})
+	public async acceptUser(@Param('id', ParseIntPipe) id: number) {
+		return await this.accountService.acceptUser(id);
 	}
 
 	@Delete(':id')

@@ -42,6 +42,24 @@ export class AdminAccountService implements OnModuleInit {
 		});
 	}
 
+	public async getVerifiedUsers(id: number): Promise<AccountModel[]> {
+		return await this.prismaService.account.findMany({
+			where: {
+				isVerified : true,
+				isAccepted : false,
+			}
+		});
+	}
+
+	public async getAcceptedUsers(id: number): Promise<AccountModel[]> {
+		return await this.prismaService.account.findMany({
+			where: {
+				isVerified: true,
+				isAccepted : true,
+			}
+		});
+	}
+
 	public async editAccount(id: number, dto: EditAccountDto): Promise<void> {
 		try {
 			const result: AccountModel = await this.prismaService.account.update({
@@ -60,6 +78,23 @@ export class AdminAccountService implements OnModuleInit {
 		} catch (error) {
 			Logger.error(error)
 			throw new NotFoundException('Nie znaleziono konta o podanym id')
+		}
+	}
+
+	public async acceptUser(id: number): Promise<void> {
+		try {
+			const result: AccountModel = await this.prismaService.account.update({
+				where: { 
+					id: id,
+				},
+				data: {
+					isAccepted: true,
+				}
+			})
+			Logger.log(`Zaakceptowano użytkownika`);
+		} catch (error) {
+			Logger.error(error);
+			throw new NotFoundException('Nie znaleziono konta do akceptacji');
 		}
 	}
 	
