@@ -83,7 +83,7 @@ export class AdminAccountService implements OnModuleInit {
 
 	public async acceptUser(id: number): Promise<void> {
 		try {
-			const result: AccountModel = await this.prismaService.account.update({
+			await this.prismaService.account.update({
 				where: { 
 					id: id,
 				},

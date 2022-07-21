@@ -47,6 +47,7 @@ model Account {
     password String
     isVerified Boolean @default(false)
     isAccepted Boolean @default(false)
+    verificationCode String
     role String
     orders Order[]
 }

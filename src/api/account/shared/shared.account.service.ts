@@ -59,7 +59,8 @@ export class SharedAccountService {
 				password: this.genHashPassword(dto.password),
 				role: role,
                 verificationCode: verificationCode,
-                isVerified: role === "admin" ? true : false,
+                isVerified: role === "admin",
+                isAccepted: role === "admin",
 			}
 		});
 

@@ -3,7 +3,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { EmailTemplates } from './mail.templates.enum';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Account as AccountModel, Order as OrderModel, Restaurant as RestaurantModel } from '@prisma/client'
+import { Account as AccountModel, Order as OrderModel, OrderItem, Product, Restaurant as RestaurantModel } from '@prisma/client'
 
 @Injectable()
 export class MailService {
@@ -38,17 +38,14 @@ export class MailService {
     );
   }
 
-  async sendOrdersToRestaurant(orders: OrderModel[], restaurant: RestaurantModel) {
+  async sendOrdersToRestaurant(items: OrderItem[], restaurant: RestaurantModel) {
     Logger.log(`Wysyłanie zamówień do ${restaurant.email} (${restaurant.name})`);
-
-    // const ordersContent = orders.map(order => order..split('|'));
-    const ordersContent = [""];
 
     this.sendEmail(
       EmailTemplates.orders,
       {
         orders: {
-          orders: ordersContent,
+          items: items,
           restaurant: restaurant,
         },
       },
@@ -61,13 +58,9 @@ export class MailService {
   private async triggerOrders() {
     const restaurants: RestaurantModel[] = await this.prismaService.restaurant.findMany();
     restaurants.forEach(async (restaurant) => {
-      const orders: OrderModel[] = await this.prismaService.order.findMany({
-        where: {
-          restaurantId: restaurant.id,
-        }
-      });
-
-      this.sendOrdersToRestaurant(orders, restaurant);
+      const items = []; // TODO:
+      
+      this.sendOrdersToRestaurant(items, restaurant);
     })
   }
 

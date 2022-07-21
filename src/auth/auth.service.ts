@@ -32,6 +32,10 @@ export class AuthService {
 		if(!acc.isVerified) {
 			throw new BadRequestException("Musisz potwierdzić maila");
 		}
+
+		if(!acc.isAccepted) {
+			throw new BadRequestException("Twoje konto nie jest zatwierdzone przez admina");
+		}
 		
 		const at = await this.getAccessToken(acc.id, acc.role);
 		const rt = this.getRefreshToken();
