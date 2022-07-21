@@ -45,7 +45,7 @@ export class AdminRestaurantsController {
 	@ApiOperation({summary: "Dodaje produkt do bazy danych"})
 	@ApiCreatedResponse({description: "Dodano"})
 	public async addProduct(@Body() dto: AddProduct): Promise<number> {
-		return await this.restaurantService.AddProduct(dto);
+		return await this.restaurantService.addProduct(dto);
 	}
 
 	@Delete('/product/:id')
@@ -65,6 +65,4 @@ export class AdminRestaurantsController {
 	public async editProduct(@Param('id') id: string, @Body() dto: EditProduct): Promise<void> {
 		return await this.restaurantService.editProduct(parseInt(id), dto);
 	}
-
-
 }

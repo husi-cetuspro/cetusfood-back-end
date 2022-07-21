@@ -4,13 +4,14 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 export class AddOrderDto {
     @ApiProperty({description: "ID Restauracji do której jest składane zamówienie"})
     @IsNumber()
-    restaurantId: number;
+    restId: number;
 
+    items: Array<OrderItem>;
 }
 
 export class OrderItem {
-    @ApiProperty({description: "ID Restauracji do której jest składane zamówienie"})
+    id: number;
+
     @IsNumber()
-    productId: number;
     count: number;
 }

@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Restaurant as RestaurantModel } from '@prisma/client';
 import { Product as ProductModel } from '@prisma/client';
-import { debugPort } from 'process';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AddRestaurantDto, EditRestaurantDto, AddProduct, EditProduct } from './admin.restaurants.dto';
 
@@ -50,8 +49,6 @@ export class AdminRestaurantsService {
 				}
 			});
 	
-
-
 			Logger.log(`Restauracja ${result.name} została dodana, id: ${result.id}`);
 			return result.id;
 		} catch(ex) {
@@ -60,7 +57,7 @@ export class AdminRestaurantsService {
 		}
 	}
 
-	public async AddProduct(dto: AddProduct): Promise<number> {
+	public async addProduct(dto: AddProduct): Promise<number> {
 		try {
 			const result: ProductModel = await this.prismaService.product.create({
 				data: {
@@ -70,6 +67,7 @@ export class AdminRestaurantsService {
 					restaurantId: dto.restaurantID,
 				}
 			});
+
 			Logger.log(`Produkt ${result.name} został dodany, id: ${result.id}`);
 			return result.id
 		} catch(ex) {

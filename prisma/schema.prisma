@@ -20,7 +20,16 @@ model Order {
     id Int @default(autoincrement()) @id
     accountId Int
     restaurantId Int
+    items OrderItem[]
     account Account @relation(fields: [accountId], references: [id])
+}
+
+model OrderItem {
+    id Int @default(autoincrement()) @id
+    orderId Int
+    productId Int
+    count Int
+    order Order @relation(fields: [orderId], references: [id])
 }
 
 model Product {
