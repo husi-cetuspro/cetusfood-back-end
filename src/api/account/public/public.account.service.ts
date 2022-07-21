@@ -21,18 +21,19 @@ export class PublicAccountService {
 					isVerified: false,
 					verificationCode: guid,
 				}
-			})
-		} catch {
+			});
+		} catch(err) {
+			Logger.error(err);
 			throw new NotFoundException("Nie znaleziono konta o podanym kodzie weryfikacyjnym");
 		}
 
-		this.prismaService.account.update({
+		await this.prismaService.account.update({
 			where: {
 				id: account.id
 			},
 			data: {
 				isVerified: true,
 			}
-		})
+		});
 	}
 }

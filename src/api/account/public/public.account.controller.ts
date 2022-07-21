@@ -23,7 +23,6 @@ export class PublicAccountController {
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Weryfikuje konto"})
 	public async verifyAccount(@Param('guid') guid: string) {
-		Logger.log(guid);
 		return await this.accountService.verifyAccount(guid);
 	}
 }
