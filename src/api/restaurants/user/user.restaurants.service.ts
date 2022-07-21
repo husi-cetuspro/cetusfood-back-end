@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Restaurant as RestaurantModel } from '@prisma/client';
 import { Product as ProductModel } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
@@ -20,19 +20,23 @@ export class UserRestaurantsService {
 	}
 
 	public async getRestaurantById(id: string): Promise<RestaurantModel> {
-		const result: RestaurantModel = await this.prismaService.restaurant.findFirst({
-			where: { id: parseInt(id) }
-		});
-
-		if(!result) {
-			throw new NotFoundException();
+		try {
+			return await this.prismaService.restaurant.findFirst({
+				where: { id: parseInt(id) }
+			});
+		} catch {
+			throw new NotFoundException("Nie znaleziono restauracji o podanym id");
 		}
-
-		return result;
 	}
 
 	public async getRestaurantsByName(name: string): Promise<RestaurantModel[]> {
-		return await this.prismaService.$queryRawUnsafe(`SELECT * FROM Restaurant WHERE name LIKE '%${name}%';`);
+		return await this.prismaService.restaurant.findMany({
+			where: {
+				name: {
+					contains: name
+				}
+			}
+		});
 	}
 
 	public async deleteRestaurant(id: number): Promise<void> {
@@ -72,7 +76,7 @@ export class UserRestaurantsService {
 		});
 
 		if(!result) {
-			throw new NotFoundException();
+			throw new InternalServerErrorException();
 		}
 
 		return result.id;

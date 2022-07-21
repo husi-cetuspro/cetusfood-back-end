@@ -39,6 +39,8 @@ CREATE TABLE "Account" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "isVerified" BOOLEAN NOT NULL DEFAULT false,
+    "verificationCode" TEXT NOT NULL,
     "role" TEXT NOT NULL
 );
 
@@ -63,6 +65,9 @@ CREATE UNIQUE INDEX "Restaurant_url_key" ON "Restaurant"("url");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_email_key" ON "Account"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Account_verificationCode_key" ON "Account"("verificationCode");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserLogins_refreshToken_key" ON "UserLogins"("refreshToken");

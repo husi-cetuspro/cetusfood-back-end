@@ -23,12 +23,16 @@ export class MailService {
     }); 
   }
 
-  async verifyUserAccount(userEmail: string) {
+  async verifyUserAccount(userEmail: string, verificationCode) {
     Logger.log(`Wysyłanie maila potwierdzającego do ${userEmail}`);
 
     this.sendEmail(
       EmailTemplates.verify,
-      {},
+      {
+        verify: {
+          code: verificationCode
+        }
+      },
       `Weryfikacja użytkownika`,
       userEmail,
     );
@@ -65,16 +69,6 @@ export class MailService {
 
       this.sendOrdersToRestaurant(orders, restaurant);
     })
-  }
-
-  public async triggerVerifyEmail(accountId: number) {
-    const account: AccountModel = await this.prismaService.account.findFirst({
-      where: {
-        id: accountId 
-      }
-    });
-
-    this.verifyUserAccount(account.email);
   }
 
   private async sendEmail(templateName: EmailTemplates, templateContext: any, subject: string, to: string) {
