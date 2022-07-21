@@ -29,7 +29,8 @@ model Account {
     id Int @default(autoincrement()) @id
     email String @unique
     password String
-    isVerified Boolean @unique
+    isVerified Boolean @default(false)
+    verificationCode String @unique
     role String
     orders Order[]
 }

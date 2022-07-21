@@ -23,12 +23,16 @@ export class MailService {
     }); 
   }
 
-  async verifyUserAccount(userEmail: string) {
+  async verifyUserAccount(userEmail: string, verificationCode) {
     Logger.log(`Wysyłanie maila potwierdzającego do ${userEmail}`);
 
     this.sendEmail(
       EmailTemplates.verify,
-      {},
+      {
+        verify: {
+          code: verificationCode
+        }
+      },
       `Weryfikacja użytkownika`,
       userEmail,
     );
