@@ -28,6 +28,10 @@ export class AuthService {
 		if(!bcrypt.compareSync(dto.password, acc.password)) {
 			throw new BadRequestException("Podane niepoprawne hasło");
 		}
+
+		if(!acc.isVerified) {
+			throw new BadRequestException("Musisz potwierdzić maila");
+		}
 		
 		const at = await this.getAccessToken(acc.id, acc.role);
 		const rt = this.getRefreshToken();
