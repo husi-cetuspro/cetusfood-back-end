@@ -1,4 +1,4 @@
-.env
 dist
+.env
 node_modules
 prisma/cetusfood.db
