@@ -53,8 +53,8 @@ export class AdminAccountController {
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Edytuje użytkownika o podanym id"})
 	@ApiNotFoundResponse({description: "Serwer nie mógł znaleść użytkownika o podanym id"})
-	public async editAccount(@Param('id') id: string,@Body() dto: EditAccountDto) {
-		return await this.accountService.editAccount(parseInt(id), dto);
+	public async editAccount(@Param('id', ParseIntPipe) id: number,@Body() dto: EditAccountDto) {
+		return await this.accountService.editAccount(id, dto);
 	}
 
 	@Put('isAccepted/:id')
@@ -69,7 +69,7 @@ export class AdminAccountController {
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Usuwa użytkownika o podanym ID"})
 	@ApiOkResponse({description: "Usunięto użytkownika"})
-	public async deleteAccount(@Param('id') id: string): Promise<void> {
-		return await this.accountService.deleteAccount(parseInt(id));
+	public async deleteAccount(@Param('id', ParseIntPipe) id: number): Promise<void> {
+		return await this.accountService.deleteAccount(id);
 	}
 }
