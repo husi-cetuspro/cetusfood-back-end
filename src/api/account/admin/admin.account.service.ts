@@ -42,7 +42,7 @@ export class AdminAccountService implements OnModuleInit {
 		});
 	}
 
-	public async getVerifiedUsers(id: number): Promise<AccountModel[]> {
+	public async getVerifiedUsers(): Promise<AccountModel[]> {
 		return await this.prismaService.account.findMany({
 			where: {
 				isVerified : true,
@@ -51,7 +51,7 @@ export class AdminAccountService implements OnModuleInit {
 		});
 	}
 
-	public async getAcceptedUsers(id: number): Promise<AccountModel[]> {
+	public async getAcceptedUsers(): Promise<AccountModel[]> {
 		return await this.prismaService.account.findMany({
 			where: {
 				isVerified: true,

@@ -5,7 +5,6 @@ import { Account as AccountModel } from '@prisma/client';
 import { PrismaService } from "src/prisma/prisma.service";
 import { Role } from "src/role.enum";
 import { MailService } from "src/mail/mail.service"
-import { resolveMx } from "dns";
 
 @Injectable()
 export class SharedAccountService {
