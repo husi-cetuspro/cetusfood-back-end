@@ -38,15 +38,15 @@ export class AdminAccountController {
 	@Get('isVerified')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Zwraca zweryfikowanych użytkowników"})
-	public async getVerifiedUsers(@Param('id', ParseIntPipe) id: number): Promise<AccountModel[]> {
-		return await this.accountService.getVerifiedUsers(id);
+	public async getVerifiedUsers(): Promise<AccountModel[]> {
+		return await this.accountService.getVerifiedUsers();
 	}
 
 	@Get('isAccepted')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({summary: "Zwraca zaakceptowanych użytkowników"})
-	public async getAcceptedUsers(@Param('id', ParseIntPipe) id: number): Promise<AccountModel[]> {
-		return await this.accountService.getAcceptedUsers(id);
+	public async getAcceptedUsers(): Promise<AccountModel[]> {
+		return await this.accountService.getAcceptedUsers();
 	}
 
 	@Put(':id')
