@@ -42,7 +42,7 @@ export class PublicAccountService {
 			await this.prismaService.account.update({
 				where: {
 					id: id,
-					
+					// TODO: Security to not be able to change passwords on other accounts
 				},
 				data: {
 					password: dto.password,
