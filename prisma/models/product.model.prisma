@@ -1,0 +1,13 @@
+model Product {
+    id           Int        @id @default(autoincrement())
+    name         String
+    price        Float
+    restaurantId Int
+    logoUrl      String
+    restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+}
+
+model Restaurant {
+    id       Int       @id
+    products Product[]
+}

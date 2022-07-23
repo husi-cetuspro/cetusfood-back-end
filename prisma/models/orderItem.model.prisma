@@ -1,0 +1,12 @@
+model OrderItem {
+    id        Int   @id @default(autoincrement())
+    orderId   Int
+    productId Int
+    count     Int
+    order     Order @relation(fields: [orderId], references: [id])
+}
+
+model Order {
+    id    Int         @id
+    items OrderItem[]
+}

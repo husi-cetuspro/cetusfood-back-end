@@ -1,0 +1,16 @@
+{
+    "mixers": [
+        {
+            "input": [
+                "./prisma/base.prisma",
+                "./prisma/models/account.model.prisma",
+                "./prisma/models/order.model.prisma",
+                "./prisma/models/orderItem.model.prisma",
+                "./prisma/models/product.model.prisma",
+                "./prisma/models/restaurant.model.prisma",
+                "./prisma/models/userLogins.model.prisma"
+            ],
+            "output": "prisma/schema.prisma"
+        }
+    ]
+}

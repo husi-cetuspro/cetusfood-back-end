@@ -1,0 +1,8 @@
+model UserLogins {
+    id           Int      @id @default(autoincrement())
+    accountId    Int
+    refreshToken String   @unique
+    expires      DateTime
+    role         String   @default("user")
+    createdAt    DateTime @default(now())
+}
