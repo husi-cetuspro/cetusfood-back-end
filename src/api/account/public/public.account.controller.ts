@@ -25,4 +25,11 @@ export class PublicAccountController {
 	public async verifyAccount(@Param('guid') guid: string) {
 		return await this.accountService.verifyAccount(guid);
 	}
+
+	@Put('/changePassword')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Pozwala użytkownikowi zmienić hasło"})
+	public async changePassword(@Param('id', ParseIntPipe) id: number, @Body() dto: EditAccountDto) {
+		return await this.accountService.changePassword(id, dto);
+	}
 }
