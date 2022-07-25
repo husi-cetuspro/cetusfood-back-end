@@ -1,5 +1,5 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, Param, Get, Logger } from '@nestjs/common';
-import { RegisterAccountDto } from '../account.dto';
+import { Body, Controller, Post, HttpCode, HttpStatus, Param, Get, Logger, Put, ParseIntPipe } from '@nestjs/common';
+import { EditAccountDto, RegisterAccountDto } from '../account.dto';
 import { PublicAccountService } from './public.account.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBadRequestResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Public } from 'src/auth/public.decorator';
