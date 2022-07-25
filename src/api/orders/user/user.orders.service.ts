@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddOrderDto } from './user.orders.dto';
 import { Order as OrderModel, OrderItem } from '@prisma/client';
@@ -30,5 +30,17 @@ export class UserOrdersService {
 		});
 
 		return result.id;
+	}
+
+	public async cancelOrder(id: number): Promise<void> {
+		try {
+			const result = await this.prismaService.order.delete({
+				where: { id: id }
+			});
+
+			Logger.log(`Zamówienie ${result.id} zostało anulowane`);
+		} catch {
+			throw new NotFoundException();
+		}
 	}
 }

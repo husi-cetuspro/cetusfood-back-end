@@ -36,21 +36,4 @@ export class PublicAccountService {
 			}
 		});
 	}
-
-	public async changePassword(id: number, dto): Promise<void> {
-		try {
-			await this.prismaService.account.update({
-				where: {
-					id: id,
-					// TODO: Security to not be able to change passwords on other accounts
-				},
-				data: {
-					password: dto.password,
-				}
-			})
-		} catch (error) {
-			Logger.error(error);
-			throw new NotFoundException("Nie można zmienić hasła");
-		}
-	}
 }
