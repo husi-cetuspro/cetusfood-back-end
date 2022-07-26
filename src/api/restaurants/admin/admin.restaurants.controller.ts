@@ -1,4 +1,3 @@
-
 import { Post, Param, Delete, Body, Put, Get, Controller, UploadedFile, UseInterceptors, UploadedFiles, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { AdminRestaurantsService } from './admin.restaurants.service';
 import { ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, } from '@nestjs/swagger';
@@ -18,7 +17,6 @@ export class AdminRestaurantsController {
 	@ApiCreatedResponse({description: "ID restauracji, ktora została dodana do bazy danych", type: 'integer', isArray: false})
 	public async addRestaurant(@Body() dto: AddRestaurantDto): Promise<number> {
 		return await this.restaurantService.addRestaurant(dto);
-		
 	}
 
 	@Put(':id')

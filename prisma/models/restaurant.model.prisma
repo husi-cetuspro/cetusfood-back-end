@@ -2,6 +2,6 @@ model Restaurant {
     id      Int     @id @default(autoincrement())
     name    String  @unique
     email   String  @unique
-    url     String? @unique
+    url     String?
     logoUrl String?
 }

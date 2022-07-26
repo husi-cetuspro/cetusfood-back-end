@@ -39,16 +39,17 @@ export class AdminRestaurantsService {
 	}
 
 	public async addRestaurant(dto: AddRestaurantDto): Promise<number> {
+		console.log(dto)
 		try {
 			const result: RestaurantModel = await this.prismaService.restaurant.create({
 				data: {
 					name: dto.name,
 					email: dto.email,
-					url: dto.url || "",
-					logoUrl: dto.logoUrl || "",
+					url: dto.url || null,
+					logoUrl: dto.logoUrl || null,
 				}
 			});
-	
+
 			Logger.log(`Restauracja ${result.name} została dodana, id: ${result.id}`);
 			return result.id;
 		} catch(ex) {

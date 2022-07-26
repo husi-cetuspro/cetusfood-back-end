@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import {IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl} from "class-validator";
 
 export class AddRestaurantDto {
     @ApiProperty({description: "Nazwa restauracji"})
@@ -13,9 +13,13 @@ export class AddRestaurantDto {
     email: string
 
     @ApiProperty({description: "Url strony restauracji"})
+    @IsOptional()
+    @IsUrl()
     url?: string
 
     @ApiProperty({description: "Url loga restauracji"})
+    @IsOptional()
+    @IsUrl()
     logoUrl?: string
 }
 
@@ -27,9 +31,13 @@ export class EditRestaurantDto {
     email?: string
 
     @ApiProperty({description: "Nowy url restauracji"})
+    @IsOptional()
+    @IsUrl()
     url?: string
     
     @ApiProperty({description: "Nowy url loga restauracji"})
+    @IsOptional()
+    @IsUrl()
     logoUrl?: string
 }
 
