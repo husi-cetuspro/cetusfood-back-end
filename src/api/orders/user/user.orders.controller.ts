@@ -1,6 +1,6 @@
-import { Post, Body, Controller, Get, HttpCode, HttpStatus, UseGuards, Req, Logger } from '@nestjs/common';
+import { Post, Param, Delete, Body, Controller, Get, HttpCode, HttpStatus, UseGuards, Req, Logger } from '@nestjs/common';
 import { UserOrdersService } from './user.orders.service'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags, } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags, ApiNotFoundResponse} from '@nestjs/swagger';
 import { AddOrderDto } from './user.orders.dto';
 import { IsUserGuard } from 'src/auth/user.guard';
 import { Request } from 'express';
@@ -19,4 +19,14 @@ export class UserOrdersController {
 	public async addOrder(@Body() dto: AddOrderDto, @Req() req: Request): Promise<number> {
 		return this.ordersService.addOrder(dto, req["user"].accId);
 	}
+
+	@Delete(':id')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({summary: "Anuluje zamówienie o podanym id"})
+	@ApiOkResponse({description: 'Zamówienie zostało pomyślnie anulowane'})
+	@ApiNotFoundResponse({description: 'Serwer nie mógł znaleść zamówienia o podanym id'})
+	public async cancelOrder(@Param('id') id: string): Promise<void> {
+		return await this.ordersService.cancelOrder(parseInt(id));
+	}
 }
+
