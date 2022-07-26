@@ -30,7 +30,6 @@ export class AdminAccountService implements OnModuleInit {
 		if(!acc){
 			throw new NotFoundException('Nie znaleziono konta o podanym id');
 		}
-
 		return acc;
 	}
 

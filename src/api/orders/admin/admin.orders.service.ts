@@ -25,4 +25,21 @@ export class AdminOrdersService {
 	public async deleteOrders(): Promise<void> {
 		await this.prismaService.order.deleteMany();
 	}
+
+	public async getUserHistory(id: number){
+		let orders = this.prismaService.order.findMany({
+			where: { accountId: id }
+		})
+		let totalCoast = 0;
+		for (let order of await orders) {
+			let orderItem = await this.prismaService.orderItem.findFirst({
+				where: { orderId: order.id }
+			})
+			let product = await this.prismaService.product.findFirst({
+				where: { id: orderItem.productId }
+			})
+			totalCoast += product.price
+		}
+		return { amounToPay: totalCoast }
+	}
 }
