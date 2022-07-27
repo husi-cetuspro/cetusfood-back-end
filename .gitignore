@@ -4,3 +4,4 @@ node_modules
 prisma/migrations
 prisma/cetusfood.db
 prisma/cetusfood.db-journal
+.idea
