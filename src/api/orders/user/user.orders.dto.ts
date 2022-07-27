@@ -6,6 +6,7 @@ export class AddOrderDto {
     @IsNumber()
     restId: number;
 
+    @IsNotEmpty()
     items: Array<OrderItem>;
 }
 
