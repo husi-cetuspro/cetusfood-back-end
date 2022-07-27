@@ -9,3 +9,8 @@ model Account {
     id     Int     @id
     orders Order[]
 }
+
+enum Status {
+    PENDING
+    ARCHIVE
+}
