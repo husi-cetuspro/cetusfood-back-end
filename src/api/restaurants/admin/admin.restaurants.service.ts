@@ -64,8 +64,8 @@ export class AdminRestaurantsService {
 				data: {
 					name: dto.name,
 					price: dto.price,
-					logoUrl: dto.logoUrl,
-					restaurantId: dto.restaurantID,
+					logoUrl: dto.logoUrl || null,
+					restaurantId: dto.restaurantId,
 				}
 			});
 

@@ -1,5 +1,5 @@
 
-import { Controller, Delete, Get, HttpCode, HttpStatus, Param, UseGuards } from '@nestjs/common';
+import {Controller, Delete, Get, HttpCode, HttpStatus, Param, Query, UseGuards} from '@nestjs/common';
 import { AdminOrdersService } from './admin.orders.service'
 import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, } from '@nestjs/swagger';
 import { Order as OrderModel } from '@prisma/client'
@@ -46,9 +46,16 @@ export class AdminOrdersController {
 		return await this.ordersService.deleteOrders();
 	}
 
+
 	@Get('/user/:id')
 	@HttpCode(200)
-	public async getUserHistory(@Param("id") userId: string){
+	public async getUserHistory(@Param("id") userId: string, @Query("status") status?: string){
+		return await this.ordersService.getUserCompletedOrders(parseInt(userId), status)
+	}
+
+	@Get('/user/topay/:id')
+	@HttpCode(200)
+	public async getCountToPay(@Param("id") userId: string){
 		return await this.ordersService.getUserHistory(parseInt(userId))
 	}
 }

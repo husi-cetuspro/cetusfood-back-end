@@ -45,18 +45,20 @@ export class AddProduct {
     @ApiProperty({description: "Nazwa Produktu"})
     @IsString()
     @IsNotEmpty()
-    name?: string;
+    name: string;
 
     @ApiProperty({description: "Cena Produktu"})
-    price?: number
-    
-    @ApiProperty({description: "URL Obrazka Produktu"})
-    @IsString()
-    @IsNotEmpty()
-    logoUrl?: string
+    @IsNumber()
+    price: number
 
     @ApiProperty({description: "ID Restauracji w ktorej znajduje sie produkt"})
-    restaurantID?: number
+    @IsNumber()
+    restaurantId: number
+    
+    @ApiProperty({description: "URL Obrazka Produktu"})
+    @IsOptional()
+    @IsUrl()
+    logoUrl?: string
 }
 
 

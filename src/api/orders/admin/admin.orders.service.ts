@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Order as OrderModel } from '@prisma/client'
+import {Status} from "../../../status.enum";
 
 @Injectable()
 export class AdminOrdersService {
@@ -24,6 +25,11 @@ export class AdminOrdersService {
 
 	public async deleteOrders(): Promise<void> {
 		await this.prismaService.order.deleteMany();
+	}
+
+	public async getUserCompletedOrders(id: number, status: string){
+		let orders = await this.prismaService.order.findMany({ where: { accountId: id, status: status }})
+		return orders
 	}
 
 	public async getUserHistory(id: number){

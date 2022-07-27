@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddOrderDto } from './user.orders.dto';
 import { Order as OrderModel, OrderItem } from '@prisma/client';
+import {Status} from "../../../status.enum";
 
 @Injectable()
 export class UserOrdersService {
@@ -22,13 +23,13 @@ export class UserOrdersService {
 		const result: OrderModel = await this.prismaService.order.create({
 			data: {
 				accountId: accId,
-				restaurantId: dto.restId,			
+				restaurantId: dto.restId,
+				status: Status.PENDING,
 				items: {
 					create: prismaItems,
 				}
 			} 
 		});
-
 		return result.id;
 	}
 }

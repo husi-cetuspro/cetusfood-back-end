@@ -10,6 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { AtGuard } from './auth/at.guard';
 import { MailModule } from './mail/mail.module';
+import {ProfileModule} from "./api/profile/profile.module";
 
 @Module({
 	imports: [
@@ -20,6 +21,7 @@ import { MailModule } from './mail/mail.module';
 		JwtModule,
 		ConfigModule.forRoot({envFilePath: '.env'}),
 		MailModule,
+		ProfileModule
 	],
 	providers: [
 		Reflector,
