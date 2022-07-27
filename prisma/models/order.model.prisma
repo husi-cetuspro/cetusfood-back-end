@@ -2,6 +2,7 @@ model Order {
     id           Int     @id @default(autoincrement())
     accountId    Int
     restaurantId Int
+    status       Int
     account      Account @relation(fields: [accountId], references: [id])
 }
 
