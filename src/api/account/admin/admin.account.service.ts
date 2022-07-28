@@ -4,7 +4,6 @@ import { Account as AccountModel } from '@prisma/client';
 import { RegisterAccountDto, EditAccountDto } from '../account.dto';
 import { SharedAccountService } from '../shared/shared.account.service';
 import { Role } from 'src/role.enum';
-import { contains } from 'class-validator';
 
 @Injectable()
 export class AdminAccountService implements OnModuleInit {

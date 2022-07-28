@@ -9,7 +9,14 @@ async function bootstrap() {
 	
 	app.use(cookieParser());
 	app.useGlobalPipes(new ValidationPipe());
-	app.enableCors(); // TODO: Enable cors only for frontend server
+
+	app.enableCors({
+		origin: [
+			process.env.CORS_ORIGIN
+		],
+		methods: ["GET", "POST", "PUT", "DELETE"],
+		credentials: true,
+	});
 
 	const options = new DocumentBuilder().setTitle("CetusFood API").build()
 	const document = SwaggerModule.createDocument(app, options);
