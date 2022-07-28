@@ -9,8 +9,7 @@ import {SharedProfileService} from "../shared/shared.profile.service";
 @ApiBearerAuth()
 @ApiTags('USER - profile')
 export class UserProfileController{
-    constructor(private readonly profileService: SharedProfileService) {
-    }
+    constructor(private readonly profileService: SharedProfileService) {}
 
     @Get('/me')
     public async me(@Req() req: Request, @Query("status") status?: string){

@@ -8,8 +8,7 @@ import {SharedProfileService} from "../shared/shared.profile.service";
 @Controller('admin/profile')
 @ApiTags('ADMIN - profile')
 export class AdminProfileController{
-    constructor(private readonly profileService: SharedProfileService) {
-    }
+    constructor(private readonly profileService: SharedProfileService) {}
 
     @Get("/user/:id")
     public async getUserProfile(@Param("id") id: string, @Query("status") status: string){

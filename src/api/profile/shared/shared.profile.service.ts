@@ -1,5 +1,5 @@
 import {PrismaService} from "../../../prisma/prisma.service";
-import {Injectable} from "@nestjs/common";
+import {Injectable, Logger} from "@nestjs/common";
 import {Status} from "../../../status.enum";
 import {InvalidValueException} from "../../../exceptions/invalidValue.exception";
 
