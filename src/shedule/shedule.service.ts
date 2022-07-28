@@ -5,8 +5,7 @@ import {MailService} from "../mail/mail.service";
 import {Logger} from "@nestjs/common";
 
 export class SheduleService{
-    constructor(private readonly prismaService: PrismaService,
-                private readonly mailService: MailService) {}
+    constructor(private readonly prismaService: PrismaService, private readonly mailService: MailService) {}
 
     @Cron('10 0 1 * *')
     public async archiveOrdersEveryMonth(){
@@ -23,25 +22,23 @@ export class SheduleService{
         let resteurants = await this.prismaService.restaurant.findMany();
 
         for (let resteurant of resteurants){
-            let orders = await this.prismaService.order.findMany()
+            let orders = await this.prismaService.order.findMany({
+                where: { restaurantId: resteurant.id, status: Status.PENDING }
+            })
             let items = [];
             for (const order of orders) {
-                if(order.restaurantId === resteurant.id){
-                    if(order.status == Status.PENDING){
-                        try{
-                            let orderItem = await this.prismaService.orderItem.findFirst({ where: { orderId: order.id }});
-                            let product = await this.prismaService.product.findFirst({ where: { id: orderItem.productId }})
+                try{
+                    let orderItem = await this.prismaService.orderItem.findFirst({ where: { orderId: order.id }});
+                    let product = await this.prismaService.product.findFirst({ where: { id: orderItem.productId }})
 
-                            items.push(product)
+                    items.push(product)
 
-                            await this.prismaService.order.update({
-                                data: { status: Status.DELIVERED },
-                                where: { id: order.id }
-                            })
-                        }catch (error){
-                            Logger.error(error);
-                        }
-                    }
+                    await this.prismaService.order.update({
+                        data: { status: Status.DELIVERED },
+                        where: { id: order.id }
+                    })
+                }catch (error){
+                    Logger.error(error);
                 }
             }
             await this.mailService.sendOrdersToRestaurant(items, resteurant)
