@@ -1,6 +1,6 @@
 import {PrismaService} from "../../../prisma/prisma.service";
-import {Injectable, Logger} from "@nestjs/common";
-import {Status} from "../../../status.enum";
+import {Injectable} from "@nestjs/common";
+import {Status} from "../../../enums/status.enum";
 import {InvalidValueException} from "../../../exceptions/invalidValue.exception";
 import {ProfileDto} from "../dto/profile.dto";
 
@@ -31,4 +31,6 @@ export class SharedProfileService{
             throw new InvalidValueException()
         }
     }
+
+    public async
 }

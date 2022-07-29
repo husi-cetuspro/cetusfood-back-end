@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Account as AccountModel } from '@prisma/client';
 import { RegisterAccountDto, EditAccountDto } from '../account.dto';
 import { SharedAccountService } from '../shared/shared.account.service';
-import { Role } from 'src/role.enum';
+import { Role } from 'src/enums/role.enum';
 
 @Injectable()
 export class AdminAccountService implements OnModuleInit {

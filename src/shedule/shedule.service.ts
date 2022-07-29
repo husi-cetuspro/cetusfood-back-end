@@ -1,6 +1,6 @@
 import {Cron} from "@nestjs/schedule";
 import {PrismaService} from "../prisma/prisma.service";
-import {Status} from "../status.enum";
+import {Status} from "../enums/status.enum";
 import {MailService} from "../mail/mail.service";
 import {Logger} from "@nestjs/common";
 
@@ -20,22 +20,17 @@ export class SheduleService{
         let resteurants = await this.prismaService.restaurant.findMany();
 
         for (let resteurant of resteurants){
-            let orders = await this.prismaService.order.findMany({
-                where: { restaurantId: resteurant.id, status: Status.PENDING }
-            })
+            let orders = await this.prismaService.order.findMany({ where: { restaurantId: resteurant.id, status: Status.PENDING }})
             let items = [];
+
             for (const order of orders) {
                 try{
-                    let items = await this.prismaService.orderItem.findMany({ where: { orderId: order.id }})
+                    let orderItems = await this.prismaService.orderItem.findMany({ where: { orderId: order.id }})
 
-                    // items.forEach(item =>{
-                    //     let product = this.prismaService.product.findFirst({ where: { id: item.productId }})
-                    //     items.push(product)
-                    // })
-
-                    // let product = await this.prismaService.product.findFirst({ where: { id: orderItem.productId }})
-                    //
-                    // items.push(product)
+                    for (const item of orderItems) {
+                        let product = await this.prismaService.product.findFirst({ where: { id: item.productId }})
+                        items.push(product)
+                    }
 
                     await this.prismaService.order.update({
                         data: { status: Status.DELIVERED },

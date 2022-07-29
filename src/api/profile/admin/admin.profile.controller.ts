@@ -2,7 +2,7 @@ import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
 import {Controller, Get, Param, Query, UseGuards} from "@nestjs/common";
 import {IsAdminGuard} from "../../../auth/admin.guard";
 import {SharedProfileService} from "../shared/shared.profile.service";
-import {Status} from "../../../status.enum";
+import {Status} from "../../../enums/status.enum";
 import {ProfileDto} from "../dto/profile.dto";
 
 @ApiBearerAuth()

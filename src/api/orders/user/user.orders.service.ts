@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddOrderDto } from './user.orders.dto';
 import { Order as OrderModel, OrderItem } from '@prisma/client';
-import {Status} from "../../../status.enum";
+import {Status} from "../../../enums/status.enum";
 
 @Injectable()
 export class UserOrdersService {
