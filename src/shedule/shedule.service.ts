@@ -9,12 +9,10 @@ export class SheduleService{
 
     @Cron('10 0 1 * *')
     public async archiveOrdersEveryMonth(){
-        let orders = await this.prismaService.order.findMany();
-        for (let order of orders) {
-            if(order.status != Status.CANCELLED){
-                order.status = Status.ARCHIVE
-            }
-        }
+        await this.prismaService.order.updateMany({
+            where: { NOT: { status: Status.CANCELLED } },
+            data: { status: Status.ARCHIVE }
+        })
     }
 
     @Cron('0 13 * * 1-5')
@@ -28,10 +26,16 @@ export class SheduleService{
             let items = [];
             for (const order of orders) {
                 try{
-                    let orderItem = await this.prismaService.orderItem.findFirst({ where: { orderId: order.id }});
-                    let product = await this.prismaService.product.findFirst({ where: { id: orderItem.productId }})
+                    let items = await this.prismaService.orderItem.findMany({ where: { orderId: order.id }})
 
-                    items.push(product)
+                    // items.forEach(item =>{
+                    //     let product = this.prismaService.product.findFirst({ where: { id: item.productId }})
+                    //     items.push(product)
+                    // })
+
+                    // let product = await this.prismaService.product.findFirst({ where: { id: orderItem.productId }})
+                    //
+                    // items.push(product)
 
                     await this.prismaService.order.update({
                         data: { status: Status.DELIVERED },
