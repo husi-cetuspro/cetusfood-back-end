@@ -54,15 +54,15 @@ export class MailService {
     );
   }
 
-  @Cron('0 13 * * 1-5')
-  private async triggerOrders() {
-    const restaurants: RestaurantModel[] = await this.prismaService.restaurant.findMany();
-    restaurants.forEach(async (restaurant) => {
-      const items = []; // TODO:
-      
-      this.sendOrdersToRestaurant(items, restaurant);
-    })
-  }
+  // @Cron('0 13 * * 1-5')
+  // private async triggerOrders() {
+  //   const restaurants: RestaurantModel[] = await this.prismaService.restaurant.findMany();
+  //   restaurants.forEach(async (restaurant) => {
+  //     const items = []; // TODO:
+  //
+  //     this.sendOrdersToRestaurant(items, restaurant);
+  //   })
+  // }
 
   private async sendEmail(templateName: EmailTemplates, templateContext: any, subject: string, to: string) {
     try {

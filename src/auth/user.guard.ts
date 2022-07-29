@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { Role } from "src/role.enum";
+import { Role } from "src/enums/role.enum";
 import { JwtPayload } from "./jwt.payload";
 
 @Injectable()

@@ -6,4 +6,5 @@ import {SheduleService} from "./shedule.service";
 @Module({
     providers: [PrismaService, SheduleService],
 })
+
 export class SheduleModule{}

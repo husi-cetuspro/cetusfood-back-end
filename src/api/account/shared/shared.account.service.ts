@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { RegisterAccountDto } from "../account.dto";
 import { Account as AccountModel } from '@prisma/client';
 import { PrismaService } from "src/prisma/prisma.service";
-import { Role } from "src/role.enum";
+import { Role } from "src/enums/role.enum";
 import { MailService } from "src/mail/mail.service"
 
 @Injectable()

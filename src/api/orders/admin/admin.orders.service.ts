@@ -1,7 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { Order as OrderModel } from '@prisma/client'
-import {Status} from "../../../status.enum";
+import {Injectable} from '@nestjs/common';
+import {PrismaService} from 'src/prisma/prisma.service';
+import {Order as OrderModel} from '@prisma/client'
 
 @Injectable()
 export class AdminOrdersService {
@@ -28,8 +27,7 @@ export class AdminOrdersService {
 	}
 
 	public async getUserCompletedOrders(id: number, status: string){
-		let orders = await this.prismaService.order.findMany({ where: { accountId: id, status: status }})
-		return orders
+		return await this.prismaService.order.findMany({where: {accountId: id, status: status}})
 	}
 
 	public async getUserHistory(id: number){

@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { RegisterAccountDto } from '../account.dto';
 import { SharedAccountService } from '../shared/shared.account.service';
-import { Role } from 'src/role.enum';
+import { Role } from 'src/enums/role.enum';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Account as AccountModel } from '@prisma/client';
 
